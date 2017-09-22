@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
@@ -14,7 +15,7 @@ import com.fasterxml.classmate.AnnotationConfiguration;
 
 import data.Entity;
 
-public class DatabaseManager {
+public class Database {
 	private static final StandardServiceRegistry registry;
 	private static SessionFactory sessionFactory;
 
@@ -38,6 +39,13 @@ public class DatabaseManager {
 		session.getTransaction().commit();
 		session.close();
 		return result;
+	}
+	
+	public static <T> Boolean Exists(Class<T> t, String where) {
+		Session session = sessionFactory.openSession();
+		Long count = (Long) session.createQuery( "SELECT count(*) FROM " + GetTableName(t) + " where " + where).uniqueResult();
+		session.close();
+		return count == 1;
 	}
 
 	public static <T> List<T> Get(Class<T> t) {
