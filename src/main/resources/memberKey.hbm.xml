@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hibernate-mapping>
+	<class name="data.MemberKey" table="memberKey">
+		<id name="memberKeyId" type="int" column="memberKeyId">
+			<generator class="identity" />
+		</id>
+		<property name="x" type="util.CustomBigIntegerType">
+			<column name="x" />
+		</property>
+		<property name="w" type="util.CustomBigIntegerType">
+			<column name="w" />
+		</property>
+		<property name="y" type="util.CustomBigIntegerType">
+			<column name="y" />
+		</property>
+		<property name="e" type="util.CustomBigIntegerType">
+			<column name="e" />
+		</property>
+		<property name="r" type="util.CustomBigIntegerType">
+			<column name="r" />
+		</property>
+		<property name="bigE" type="util.CustomBigIntegerType">
+			<column name="bigE" />
+		</property>
+		<property name="bigY" type="util.CustomBigIntegerType">
+			<column name="bigY" />
+		</property>
+		<property name="commitment" type="util.CustomBigIntegerType">
+			<column name="commitment" />
+		</property>
+	</class>
+</hibernate-mapping>

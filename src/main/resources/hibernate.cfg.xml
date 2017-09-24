@@ -6,6 +6,11 @@
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password">123456</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-        <mapping resource="user.hbm.xml" />
+        <property name="hibernate.show_sql">true</property>
+        <mapping resource="user.hbm.xml" />       
+        <mapping resource="publicKey.hbm.xml" />
+        <mapping resource="memberKey.hbm.xml" />
+        <mapping resource="managerKey.hbm.xml" />
+        <mapping resource="groupSignature.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

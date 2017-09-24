@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hibernate-mapping>
+	<class name="data.Membership" table="membership">
+		<composite-id>
+			<key-property name="userId" type="int" column="userId" />
+			<key-property name="groupSignatureId" type="int"
+				column="groupSignatureId" />
+		</composite-id>
+		<property name="bigY" type="util.CustomBigIntegerType">
+			<column name="bigY" />
+		</property>
+	</class>
+</hibernate-mapping>
