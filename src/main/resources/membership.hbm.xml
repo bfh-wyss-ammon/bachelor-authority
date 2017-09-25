@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hibernate-mapping>
 	<class name="data.Membership" table="membership">
-		<composite-id>
-			<key-property name="userId" type="int" column="userId" />
-			<key-property name="groupSignatureId" type="int"
-				column="groupSignatureId" />
-		</composite-id>
+		<id name="membershipId" type="int" column="membershipId">
+			<generator class="identity" />
+		</id>
 		<property name="bigY" type="util.CustomBigIntegerType">
 			<column name="bigY" />
 		</property>
+		<many-to-one name="user" class="data.User" column="userId" unique="true" not-null="true"  />
+		<many-to-one name="groupKey" class="data.GroupKey" column="groupKeyId" unique="true" not-null="true" />
 	</class>
 </hibernate-mapping>

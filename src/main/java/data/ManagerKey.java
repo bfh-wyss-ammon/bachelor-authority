@@ -42,10 +42,6 @@ public class ManagerKey {
 		this.q = q;
 	}
 
-	public BigInteger getProductFromPandQ() {
-		return p.multiply(q);
-	}
-
 	public BigInteger getXh() {
 		return Xh;
 	}

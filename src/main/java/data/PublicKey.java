@@ -1,12 +1,10 @@
 // todo (gabriel): add descrption
 package data;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 
-@Entity(dbTableName = "PublicKey")
-public class PublicKey {
-
-	private Integer publicKeyId;
+public class PublicKey implements Serializable {
 	private BigInteger n;
 	private BigInteger a;
 	private BigInteger g;
@@ -20,14 +18,6 @@ public class PublicKey {
 
 	public PublicKey() {
 		super();
-	}
-
-	public Integer getPublicKeyId() {
-		return publicKeyId;
-	}
-
-	public void setPublicKeyId(Integer publicKeyId) {
-		this.publicKeyId = publicKeyId;
 	}
 
 	public BigInteger getN() {

@@ -2,10 +2,7 @@ package data;
 
 import java.math.BigInteger;
 
-@Entity(dbTableName = "MemberKey")
-public class MemberKey {
-
-	private Integer memberKeyId;
+public class SecretKey {
 	private BigInteger x;
 	private BigInteger w;
 	private BigInteger y;
@@ -15,16 +12,8 @@ public class MemberKey {
 	private BigInteger bigY;
 	private BigInteger commitment;
 
-	public MemberKey() {
-
-	}
-
-	public Integer getMemberKeyId() {
-		return memberKeyId;
-	}
-
-	public void setMemberKeyId(Integer memberKeyId) {
-		this.memberKeyId = memberKeyId;
+	public SecretKey() {
+		super();
 	}
 
 	public BigInteger getX() {
@@ -90,4 +79,5 @@ public class MemberKey {
 	public void setCommitment(BigInteger commitment) {
 		this.commitment = commitment;
 	}
+
 }

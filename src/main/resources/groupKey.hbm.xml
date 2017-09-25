@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hibernate-mapping>
-	<class name="data.GroupSignature" table="groupsignature">
-		<id name="groupSignatureId" type="int" column="groupSignatureId">
+	<class name="data.GroupKey" table="groupKey">
+		<id name="groupKeyId" type="int" column="groupKeyId">
 			<generator class="identity" />
 		</id>
-		<many-to-one name="managerKey" class="data.ManagerKey"
+		<many-to-one name="managerKey" class="data.ManagerKey" lazy="false" fetch="select"
 			column="managerKeyId" unique="true" not-null="true" cascade="all" />
-		<many-to-one name="publicKey" class="data.PublicKey"
+		<many-to-one name="publicKey" class="data.PublicKey" lazy="false" fetch="select"
 			column="publicKeyId" unique="true" not-null="true" cascade="all" />
 	</class>
 </hibernate-mapping>

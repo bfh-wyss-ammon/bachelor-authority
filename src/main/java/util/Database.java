@@ -44,7 +44,7 @@ public class Database {
 		}
 	}
 
-	public static <T> T Get(Class<T> t, int primaryKey) {
+	public static <T> T Get(Class<T> t, int primaryKey) {		
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		T result = (T) session.get(t, primaryKey);
