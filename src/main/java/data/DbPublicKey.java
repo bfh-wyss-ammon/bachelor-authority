@@ -12,6 +12,7 @@ public class DbPublicKey implements PublicKey, Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	private Integer publicKeyId;
 	private BigInteger n;
 	private BigInteger a;
 	private BigInteger g;
@@ -101,6 +102,14 @@ public class DbPublicKey implements PublicKey, Serializable {
 
 	public void setBigH(BigInteger bigH) {
 		this.bigH = bigH;
+	}
+
+	public Integer getPublicKeyId() {
+		return publicKeyId;
+	}
+
+	public void setPublicKeyId(Integer publicKeyId) {
+		this.publicKeyId = publicKeyId;
 	}
 
 }

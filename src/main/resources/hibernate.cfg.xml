@@ -8,9 +8,8 @@
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="hibernate.show_sql">true</property>
         <mapping resource="user.hbm.xml" />       
-        <mapping resource="publicKey.hbm.xml" />
-        <mapping resource="membership.hbm.xml" />
+        <mapping resource="publicKey.hbm.xml" /> 
         <mapping resource="managerKey.hbm.xml" />
-        <mapping resource="groupKey.hbm.xml" />
+        <mapping resource="group.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

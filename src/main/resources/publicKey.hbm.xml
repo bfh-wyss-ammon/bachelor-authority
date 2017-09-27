@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hibernate-mapping>
-	<class name="data.PublicKey" table="publicKey">
+	<class name="data.DbPublicKey" table="publicKey">
 		<id name="publicKeyId" type="int" column="publicKeyId">
 			<generator class="identity" />
 		</id>
