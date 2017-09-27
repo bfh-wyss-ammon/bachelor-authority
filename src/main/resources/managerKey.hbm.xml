@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hibernate-mapping>
+	<class name="data.DbManagerKey" table="managerKey">
+		<id name="managerKeyId" type="int" column="managerKeyId">
+			<generator class="identity" />
+		</id>
+		<property name="Xg" type="util.CustomBigIntegerType">
+			<column name="Xg" />
+		</property>
+		<property name="p" type="util.CustomBigIntegerType">
+			<column name="p" />
+		</property>
+		<property name="q" type="util.CustomBigIntegerType">
+			<column name="q" />
+		</property>
+	</class>
+</hibernate-mapping>

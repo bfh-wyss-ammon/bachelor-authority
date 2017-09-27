@@ -10,6 +10,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
 
 import com.fasterxml.classmate.AnnotationConfiguration;
 
@@ -31,8 +32,19 @@ public class Database {
 			e.printStackTrace();
 		}
 	}
+	
+	static {
+		try {
+			sessionFactory = new Configuration()
+					.configure()
+					.buildSessionFactory();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-	public static <T> T Get(Class<T> t, int primaryKey) {
+	public static <T> T Get(Class<T> t, int primaryKey) {		
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		T result = (T) session.get(t, primaryKey);

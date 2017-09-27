@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hibernate-mapping>
+	<class name="data.DbPublicKey" table="publicKey">
+		<id name="publicKeyId" type="int" column="publicKeyId">
+			<generator class="identity" />
+		</id>
+		<property name="n" type="util.CustomBigIntegerType">
+			<column name="n" />
+		</property>
+		<property name="a" type="util.CustomBigIntegerType">
+			<column name="a" />
+		</property>
+		<property name="g" type="util.CustomBigIntegerType">
+			<column name="g" />
+		</property>
+		<property name="h" type="util.CustomBigIntegerType">
+			<column name="h" />
+		</property>
+		<property name="w" type="util.CustomBigIntegerType">
+			<column name="w" />
+		</property>
+		<property name="bigQ" type="util.CustomBigIntegerType">
+			<column name="bigQ" />
+		</property>
+		<property name="bigP" type="util.CustomBigIntegerType">
+			<column name="bigP" />
+		</property>
+		<property name="bigF" type="util.CustomBigIntegerType">
+			<column name="bigF" />
+		</property>
+		<property name="bigG" type="util.CustomBigIntegerType">
+			<column name="bigG" />
+		</property>
+		<property name="bigH" type="util.CustomBigIntegerType">
+			<column name="bigH" />
+		</property>
+	</class>
+</hibernate-mapping>
