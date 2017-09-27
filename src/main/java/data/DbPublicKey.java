@@ -1,10 +1,17 @@
-// todo (gabriel): add descrption
 package data;
 
 import java.io.Serializable;
 import java.math.BigInteger;
 
-public class PublicKey implements Serializable {
+import keys.PublicKey;
+
+@Entity(dbTableName = "PublicKey")
+public class DbPublicKey implements PublicKey, Serializable {
+	/**
+	 * default serial version id
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private BigInteger n;
 	private BigInteger a;
 	private BigInteger g;
@@ -15,10 +22,6 @@ public class PublicKey implements Serializable {
 	private BigInteger bigF;
 	private BigInteger bigG;
 	private BigInteger bigH;
-
-	public PublicKey() {
-		super();
-	}
 
 	public BigInteger getN() {
 		return n;
@@ -99,8 +102,5 @@ public class PublicKey implements Serializable {
 	public void setBigH(BigInteger bigH) {
 		this.bigH = bigH;
 	}
-	
-	public BigInteger getProductNandN() {
-		return n.multiply(n);
-	}
+
 }
