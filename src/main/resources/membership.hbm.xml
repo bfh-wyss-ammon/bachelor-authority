@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hibernate-mapping>
+	<class name="data.DbMembership" table="membership">
+		<id name="membershipId" type="int" column="membershipId">
+			<generator class="identity" />
+		</id>
+		<many-to-one name="user" class="data.DbUser" column="userId" unique="true" not-null="true" lazy="false" />
+		<many-to-one name="group" class="data.DbGroup" column="groupId" unique="true" not-null="true" lazy="false" />
+		<property name="bigY" type="util.CustomBigIntegerType">
+			<column name="bigY" />
+		</property>
+		<property name="approved">
+			<column name="approved" />
+		</property>
+	</class>
+</hibernate-mapping>
