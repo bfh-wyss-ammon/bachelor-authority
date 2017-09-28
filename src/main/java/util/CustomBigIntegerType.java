@@ -18,9 +18,7 @@ public class CustomBigIntegerType implements UserType {
 
 	@Override
 	public int[] sqlTypes() {
-		return new int[] {
-           StringType.INSTANCE.sqlType(),
-        };
+		return new int[] { StringType.INSTANCE.sqlType(), };
 	}
 
 	@Override
@@ -30,23 +28,20 @@ public class CustomBigIntegerType implements UserType {
 
 	@Override
 	public boolean equals(Object x, Object y) throws HibernateException {
-		if(x == null || y == null)
-		{
+		if (x == null || y == null) {
 			return false;
 		}
 		BigInteger a;
 		BigInteger b;
-		if(x.getClass() == String.class) {
-			a = new BigInteger((String)x);
+		if (x.getClass() == String.class) {
+			a = new BigInteger((String) x);
+		} else {
+			a = (BigInteger) x;
 		}
-		else {
-			a = (BigInteger)x;
-		}
-		if(y.getClass() == String.class) {
-			b = new BigInteger((String)y);
-		}
-		else {
-			b = (BigInteger)y;
+		if (y.getClass() == String.class) {
+			b = new BigInteger((String) y);
+		} else {
+			b = (BigInteger) y;
 		}
 		return a.equals(b);
 	}
@@ -60,30 +55,33 @@ public class CustomBigIntegerType implements UserType {
 	@Override
 	public Object nullSafeGet(ResultSet rs, String[] names, SharedSessionContractImplementor session, Object owner)
 			throws HibernateException, SQLException {
-		
-		 String text = (String) StringType.INSTANCE.get(rs, names[0], session);
-		// TODO Auto-generated method stub
-		return new BigInteger(text);
+		String text = (String) StringType.INSTANCE.get(rs, names[0], session);
+		if (text != null) {
+			return new BigInteger(text);
+		}
+		return null;
 	}
 
 	@Override
 	public void nullSafeSet(PreparedStatement st, Object value, int index, SharedSessionContractImplementor session)
 			throws HibernateException, SQLException {
 		// TODO Auto-generated method stub
-		if(value == null)
-		{
+		if (value == null) {
 			st.setNull(index, Types.OTHER);
+		}
+		else if(value.getClass() == BigInteger.class) {
+			st.setString(index, ((BigInteger) value).toString());
 		}
 		else {
 			st.setString(index, (String) value);
 		}
-		
+
 	}
 
 	@Override
 	public Object deepCopy(Object value) throws HibernateException {
 		// TODO Auto-generated method stub
-		if(value == null) {
+		if (value == null) {
 			return null;
 		}
 		return ((BigInteger) value).toString();

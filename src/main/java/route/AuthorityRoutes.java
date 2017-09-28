@@ -3,7 +3,7 @@ import static spark.Spark.*;
 
 import com.google.gson.Gson;
 
-import data.User;
+import data.DbUser;
 import util.Credential;
 import util.Route;
 
@@ -21,7 +21,7 @@ public class AuthorityRoutes {
 				
 		post("/login", (request, response) -> {
 			try {
-				User user = (User)gson.fromJson(request.body(), User.class);
+				DbUser user = (DbUser)gson.fromJson(request.body(), DbUser.class);
 				if(!Credential.IsValid(user.getMail(), user.getPassword())) {
 					response.status(Route.StatuscodeUnauthorized);
 					return "";

@@ -53,9 +53,9 @@ public class Database {
 		return result;
 	}
 	
-	public static <T> Boolean Exists(Class<T> t, String where) {
+	public static <T> Boolean Exists(String tableName, String where) {
 		Session session = sessionFactory.openSession();
-		Long count = (Long) session.createQuery( "SELECT count(*) FROM " + GetTableName(t) + " where " + where).uniqueResult();
+		Long count = (Long) session.createQuery( "SELECT count(*) FROM " + tableName + " where " + where).uniqueResult();
 		session.close();
 		return count == 1;
 	}
@@ -69,7 +69,7 @@ public class Database {
 		return list;
 	}
 	
-	public static void Delete(Entity entity) {
+	public static void Delete(Object entity) {
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		session.delete(entity);

@@ -1,17 +1,17 @@
 package data;
 
 @Entity(dbTableName = "User")
-public class User {
+public class DbUser {
 
 	private Integer userId;
 	private String mail;
 	private String password;
 
-	public User() {
+	public DbUser() {
 
 	}
 
-	public User(String mail, String password) {
+	public DbUser(String mail, String password) {
 		super();
 		this.mail = mail;
 		this.password = password;
