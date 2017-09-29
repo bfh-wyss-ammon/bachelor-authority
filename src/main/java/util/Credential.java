@@ -7,15 +7,14 @@ import java.util.Base64;
 import data.DbUser;
 
 public class Credential {
-	private static final String Salt = "HonoLulu";
 
 	public static Boolean IsValid(String mail, String password) {
-		String securePassword = GetHash(Salt + password);
+		String securePassword = GetHash(SettingsHelper.getSettings() + password);
 		return Database.Exists("user",  "email = '"+mail+"' AND password = '"+ securePassword +"'");
 	}
 	
 	public static String securePassword(String hash) {
-		String securePassword = GetHash(Salt + hash);
+		String securePassword = GetHash(SettingsHelper.getSettings().getSalt() + hash);
 		return securePassword;
 	}
 

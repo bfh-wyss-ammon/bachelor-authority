@@ -8,10 +8,12 @@ public class Route {
 	// for more: https://de.wikipedia.org/wiki/HTTP-Statuscode
 	public static final int StatuscodeUnauthorized = 401;
 	public static final int StatuscodeOk = 200;
+	public static final int InternalServerError = 500;
+	public static final int Conflict = 409;
 	
 	
 	private static final String Origin = "http://localhost:8080";
-	private static final String Methods = "POST, GET";
+	private static final String Methods = "POST, GET, PUT";
 	private static final String Headers = "Content-Type";
 	
 	public static String ConfigureOptions(Request request, Response response) {
