@@ -1,13 +1,21 @@
 package data;
 
+import com.google.gson.annotations.Expose;
+
 import settings.Settings;
 
 public class AuthoritySettings implements Settings {
+	@Expose
 	private int modulus;
+	@Expose
 	private int lE;
+	@Expose
 	private int lQ;
+	@Expose
 	private int lc;
+	@Expose
 	private int le;
+	@Expose
 	private int prime_certainty;
 	private String salt;
 
