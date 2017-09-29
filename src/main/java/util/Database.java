@@ -4,17 +4,21 @@ import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.List;
 
-import org.hibernate.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 
 import com.fasterxml.classmate.AnnotationConfiguration;
-
-import data.Entity;
 
 public class Database {
 	private static final StandardServiceRegistry registry;
@@ -32,19 +36,24 @@ public class Database {
 			e.printStackTrace();
 		}
 	}
-	
+
 	static {
 		try {
-			sessionFactory = new Configuration()
-					.configure()
-					.buildSessionFactory();
-			
+			sessionFactory = new Configuration().configure().buildSessionFactory();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static <T> T Get(Class<T> t, int primaryKey) {		
+	public static <T> List<T> Get(Class<T> fieldType, String fieldName, Class parenType) {
+		Session session = sessionFactory.openSession();
+		List<T> result = (List<T>) session.createQuery("Select " + fieldName + " FROM " + getTableName(parenType)).list();
+		session.close();
+		return result;
+	}
+	
+	public static <T> T Get(Class<T> t, int primaryKey) {
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		T result = (T) session.get(t, primaryKey);
@@ -53,9 +62,23 @@ public class Database {
 		return result;
 	}
 	
-	public static <T> Boolean Exists(String tableName, String where) {
+	private static String getTableName(Class t) {
+		String name =  t.getSimpleName();
+		int i = name.lastIndexOf(".");
+		return i > 0 ? name.substring(i): name;
+	}
+	
+	public static <T> T Get(Class<T> t, String where) {
 		Session session = sessionFactory.openSession();
-		Long count = (Long) session.createQuery( "SELECT count(*) FROM " + tableName + " where " + where).uniqueResult();
+		T result = (T) session.createQuery("FROM " + getTableName(t) +  " where " + where).getSingleResult();
+		session.close();
+		return result;
+	}
+	
+	public static <T> Boolean Exists(Class<?> t, String where) {
+		Session session = sessionFactory.openSession();
+		Long count = (Long) session.createQuery("SELECT count(*) FROM " + getTableName(t) + " where " + where)
+				.uniqueResult();
 		session.close();
 		return count == 1;
 	}
@@ -63,12 +86,12 @@ public class Database {
 	public static <T> List<T> Get(Class<T> t) {
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
-		List<T> list = (List<T>) session.createQuery("from " + GetTableName(t)).list();
+		List<T> list = (List<T>) session.createQuery("from " + getTableName(t)).list();
 		session.getTransaction().commit();
 		session.close();
 		return list;
 	}
-	
+
 	public static void Delete(Object entity) {
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
@@ -102,27 +125,12 @@ public class Database {
 		session.getTransaction().commit();
 		session.close();
 	}
-	
+
 	public static void SaveOrUpdate(Object obj) {
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		session.saveOrUpdate(obj);
 		session.getTransaction().commit();
 		session.close();
-	}
-	
-	public static String GetTableName(Class<?> t) {
-		Annotation[] annotions = t.getAnnotations();
-		if (annotions != null && annotions.length > 0) {
-			for (int i = 0; i < annotions.length; i++) {
-				if (annotions[i].annotationType() == Entity.class) {
-					Entity entity = (Entity) annotions[i];
-					return entity.dbTableName();
-				}
-			}
-		}
-
-		System.out.println("DatabaseManager.GetTableName: no annotions found");
-		return "";
 	}
 }

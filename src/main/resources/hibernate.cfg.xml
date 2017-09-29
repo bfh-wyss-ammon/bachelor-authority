@@ -11,6 +11,8 @@
         <mapping resource="publicKey.hbm.xml" /> 
         <mapping resource="managerKey.hbm.xml" />
         <mapping resource="group.hbm.xml" />
-        <mapping resource="membership.hbm.xml" />      
+        <mapping resource="membership.hbm.xml" />   
+        <mapping resource="joinSession.hbm.xml" />     
+        <mapping class="data.DbUser" />  
     </session-factory>
 </hibernate-configuration>

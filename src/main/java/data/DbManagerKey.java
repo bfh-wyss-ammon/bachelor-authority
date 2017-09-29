@@ -5,7 +5,6 @@ import java.math.BigInteger;
 
 import keys.ManagerKey;
 
-@Entity(dbTableName = "ManagerKey")
 public class DbManagerKey implements ManagerKey, Serializable {
 
 	/**

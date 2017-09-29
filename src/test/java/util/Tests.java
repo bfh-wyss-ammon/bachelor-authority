@@ -4,14 +4,15 @@ package util;
 import static org.junit.Assert.*;
 
 import java.math.BigInteger;
+import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import data.DbGroup;
 import data.DbManagerKey;
-import data.DbMembership;
 import data.DbPublicKey;
+import data.DbMembership;
 import data.DbUser;
 import demo.DemoSecretKey;
 import keys.SecretKey;
@@ -20,7 +21,7 @@ import responses.JoinResponse;
 import signatures.Signature;
 
 public class Tests {
-	private String demoUserMail = "demo@user.ch";
+	private String demoUserMail = "test@user.ch";
 	private String demoUserPassword = "test";
 	private String demoUserPasswordHash;
 	private String demoUserPasswordSalt;
@@ -72,6 +73,7 @@ public class Tests {
 			
 			memberKeyA.maintainResponse(joinResponseA);
 			membership.setApproved(true);
+			membership.setCreated(new Date());
 			Database.Update(membership);
 			
 			byte[] testmessage = new BigInteger("1990").toByteArray();

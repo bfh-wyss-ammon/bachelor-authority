@@ -1,8 +1,8 @@
 package data;
 
 import java.math.BigInteger;
+import java.util.Date;
 
-@Entity(dbTableName = "Membership")
 public class DbMembership {
 
 	private int membershipId;
@@ -10,9 +10,26 @@ public class DbMembership {
 	private DbGroup group;
 	private BigInteger bigY;
 	private Boolean approved;
+	private Date created;
 
+	
+	
 	public int getMembershipId() {
 		return membershipId;
+	}
+
+	public DbMembership() {
+		super();
+	}
+	
+	
+
+	public DbMembership(DbUser user, DbGroup group) {
+		super();
+		this.user = user;
+		this.group = group;
+		this.approved = false;
+		this.created = new Date();
 	}
 
 	public void setMembershipId(int membershipId) {
@@ -49,6 +66,14 @@ public class DbMembership {
 
 	public void setApproved(Boolean approved) {
 		this.approved = approved;
+	}
+
+	public Date getCreated() {
+		return created;
+	}
+
+	public void setCreated(Date created) {
+		this.created = created;
 	}
 
 }
