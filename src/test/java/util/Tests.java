@@ -4,6 +4,7 @@ package util;
 import static org.junit.Assert.*;
 
 import java.math.BigInteger;
+import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -72,6 +73,7 @@ public class Tests {
 			
 			memberKeyA.maintainResponse(joinResponseA);
 			membership.setApproved(true);
+			membership.setCreated(new Date());
 			Database.Update(membership);
 			
 			byte[] testmessage = new BigInteger("1990").toByteArray();

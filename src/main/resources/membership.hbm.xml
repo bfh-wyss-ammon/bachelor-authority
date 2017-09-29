@@ -12,5 +12,8 @@
 		<property name="approved">
 			<column name="approved" />
 		</property>
+		<property name="created">
+			<column name="created" />
+		</property>
 	</class>
 </hibernate-mapping>

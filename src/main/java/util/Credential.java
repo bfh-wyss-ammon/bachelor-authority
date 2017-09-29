@@ -8,8 +8,8 @@ import data.DbUser;
 
 public class Credential {
 
-	public static Boolean IsValid(String mail, String password) {
-		String securePassword = GetHash(SettingsHelper.getSettings() + password);
+	public static Boolean IsValid(String mail, String hashPassword) {
+		String securePassword = GetHash(SettingsHelper.getSettings().getSalt() + hashPassword);
 		return Database.Exists("user",  "email = '"+mail+"' AND password = '"+ securePassword +"'");
 	}
 	
