@@ -46,6 +46,13 @@ public class Database {
 		}
 	}
 
+	public static <T> List<T> Get(Class<T> fieldType, String fieldName, Class parenType) {
+		Session session = sessionFactory.openSession();
+		List<T> result = (List<T>) session.createQuery("Select " + fieldName + " FROM " + getTableName(parenType)).list();
+		session.close();
+		return result;
+	}
+	
 	public static <T> T Get(Class<T> t, int primaryKey) {
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
@@ -63,7 +70,6 @@ public class Database {
 	
 	public static <T> T Get(Class<T> t, String where) {
 		Session session = sessionFactory.openSession();
-		
 		T result = (T) session.createQuery("FROM " + getTableName(t) +  " where " + where).getSingleResult();
 		session.close();
 		return result;

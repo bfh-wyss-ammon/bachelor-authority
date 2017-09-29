@@ -1,8 +1,12 @@
 package data;
 
+import com.google.gson.annotations.Expose;
+
 public class DbGroup {
+	@Expose
 	private Integer groupId;
 	private DbManagerKey managerKey;
+	@Expose
 	private DbPublicKey publicKey;
 	public Integer getGroupId() {
 		return groupId;

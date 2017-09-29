@@ -3,6 +3,8 @@ package data;
 import java.io.Serializable;
 import java.math.BigInteger;
 
+import com.google.gson.annotations.Expose;
+
 import keys.PublicKey;
 
 public class DbPublicKey implements PublicKey, Serializable {
@@ -12,15 +14,26 @@ public class DbPublicKey implements PublicKey, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer publicKeyId;
+
+	@Expose
 	private BigInteger n;
+	@Expose
 	private BigInteger a;
+	@Expose
 	private BigInteger g;
+	@Expose
 	private BigInteger h;
+	@Expose
 	private BigInteger w;
+	@Expose
 	private BigInteger bigQ;
+	@Expose
 	private BigInteger bigP;
+	@Expose
 	private BigInteger bigF;
+	@Expose
 	private BigInteger bigG;
+	@Expose
 	private BigInteger bigH;
 
 	public BigInteger getN() {

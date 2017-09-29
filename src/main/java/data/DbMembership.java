@@ -12,8 +12,24 @@ public class DbMembership {
 	private Boolean approved;
 	private Date created;
 
+	
+	
 	public int getMembershipId() {
 		return membershipId;
+	}
+
+	public DbMembership() {
+		super();
+	}
+	
+	
+
+	public DbMembership(DbUser user, DbGroup group) {
+		super();
+		this.user = user;
+		this.group = group;
+		this.approved = false;
+		this.created = new Date();
 	}
 
 	public void setMembershipId(int membershipId) {

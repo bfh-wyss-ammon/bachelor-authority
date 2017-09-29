@@ -13,6 +13,11 @@ public class Credential {
 		return Database.Exists(DbUser.class,  "email = '"+mail+"' AND password = '"+ securePassword +"'");
 	}
 	
+	public static DbUser getUser(String mail, String hashPassword) {
+		String securePassword = GetHash(SettingsHelper.getSettings().getSalt() + hashPassword);
+		return Database.Get(DbUser.class,  "email = '"+mail+"' AND password = '"+ securePassword +"'");
+	}
+	
 	public static String securePassword(String hash) {
 		String securePassword = GetHash(SettingsHelper.getSettings().getSalt() + hash);
 		return securePassword;

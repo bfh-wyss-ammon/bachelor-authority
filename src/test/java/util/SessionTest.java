@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import data.DbGroup;
 import data.DbJoinSession;
 import data.DbMembership;
 import data.DbUser;
@@ -22,7 +23,11 @@ public class SessionTest {
 		demoUserPasswordSalt = Credential.securePassword(demoUserPasswordHash);
 	}
 	
-	
+	@Test
+	public void selectGroup() {
+		DbGroup group = GroupHelper.getGroup();
+		assertNotNull(group);
+	}
 	
 	@Test
 	public void createSession() {		

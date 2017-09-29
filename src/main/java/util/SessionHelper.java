@@ -15,7 +15,9 @@ public class SessionHelper {
 		String where = "userId=" + user.getUserId();
 		
 		if (Database.Exists(DbJoinSession.class, where)) {
-			return Database.Get(DbJoinSession.class, where);			
+			DbJoinSession session = Database.Get(DbJoinSession.class, where);
+			session.setCreated(new Date());
+			return session;
 		} else {
 
 			DbJoinSession session = new DbJoinSession();
@@ -24,6 +26,17 @@ public class SessionHelper {
 			session.setCreated(new Date());
 			return session;
 		}
+	}
+	
+	public static DbJoinSession getSession(String token) {
+		String where = "token='" + token+ "'";
+		
+		if (token != null && Database.Exists(DbJoinSession.class, where)) {
+			DbJoinSession session = Database.Get(DbJoinSession.class, where);
+			session.setCreated(new Date());
+			return session;
+		}
+		return null;
 	}
 		
 	public static DbUser getUser(String token) {

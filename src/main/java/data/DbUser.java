@@ -1,9 +1,15 @@
 package data;
 
+import com.google.gson.annotations.Expose;
+
 public class DbUser {
 
 	private Integer userId;
+
+	@Expose
 	private String mail;
+
+	@Expose
 	private String password;
 
 	public DbUser() {
