@@ -47,7 +47,7 @@ public class Tests {
 			Database.Save(DbUser.class, user);
 			assertNotNull(user.getUserId());
 						
-			Generator.generate(publicKey, managerKey);
+			Generator.generate(SettingsHelper.getSettings(), publicKey, managerKey);
 			
 			group.setManagerKey(managerKey);
 			group.setPublicKey(publicKey);
@@ -61,12 +61,12 @@ public class Tests {
 			
 			// SmartPhone A
 			SecretKey memberKeyA = new DemoSecretKey();
-			JoinHelper.init(Database.Get(DbPublicKey.class, publicKey.getPublicKeyId()), memberKeyA);
+			JoinHelper.init(SettingsHelper.getSettings(), Database.Get(DbPublicKey.class, publicKey.getPublicKeyId()), memberKeyA);
 
 			JoinRequest joinRequestA = new JoinRequest(memberKeyA);
 			
 
-			JoinResponse joinResponseA = JoinHelper.join(publicKey, managerKey, joinRequestA);
+			JoinResponse joinResponseA = JoinHelper.join(SettingsHelper.getSettings(), publicKey, managerKey, joinRequestA);
 			membership.setBigY(joinRequestA.bigY());
 			Database.Update(membership);
 			
@@ -76,9 +76,9 @@ public class Tests {
 			
 			byte[] testmessage = new BigInteger("1990").toByteArray();
 
-			Signature signatureA = SignHelper.sign(memberKeyA, publicKey, testmessage);
+			Signature signatureA = SignHelper.sign(SettingsHelper.getSettings(), memberKeyA, publicKey, testmessage);
 
-			assertTrue(VerifyHelper.verify(publicKey, signatureA, testmessage));
+			assertTrue(VerifyHelper.verify(SettingsHelper.getSettings(), publicKey, signatureA, testmessage));
 
 			
 			
