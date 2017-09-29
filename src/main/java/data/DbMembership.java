@@ -3,7 +3,6 @@ package data;
 import java.math.BigInteger;
 import java.util.Date;
 
-@Entity(dbTableName = "Membership")
 public class DbMembership {
 
 	private int membershipId;

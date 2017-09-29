@@ -1,6 +1,5 @@
 package data;
 
-@Entity(dbTableName = "User")
 public class DbUser {
 
 	private Integer userId;

@@ -1,6 +1,5 @@
 package data;
 
-@Entity(dbTableName = "CyrptoGroup")
 public class DbGroup {
 	private Integer groupId;
 	private DbManagerKey managerKey;

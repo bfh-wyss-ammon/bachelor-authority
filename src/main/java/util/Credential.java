@@ -10,7 +10,7 @@ public class Credential {
 
 	public static Boolean IsValid(String mail, String hashPassword) {
 		String securePassword = GetHash(SettingsHelper.getSettings().getSalt() + hashPassword);
-		return Database.Exists("user",  "email = '"+mail+"' AND password = '"+ securePassword +"'");
+		return Database.Exists(DbUser.class,  "email = '"+mail+"' AND password = '"+ securePassword +"'");
 	}
 	
 	public static String securePassword(String hash) {

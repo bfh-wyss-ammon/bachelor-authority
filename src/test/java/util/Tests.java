@@ -11,8 +11,8 @@ import org.junit.Test;
 
 import data.DbGroup;
 import data.DbManagerKey;
-import data.DbMembership;
 import data.DbPublicKey;
+import data.DbMembership;
 import data.DbUser;
 import demo.DemoSecretKey;
 import keys.SecretKey;
@@ -21,7 +21,7 @@ import responses.JoinResponse;
 import signatures.Signature;
 
 public class Tests {
-	private String demoUserMail = "demo@user.ch";
+	private String demoUserMail = "test@user.ch";
 	private String demoUserPassword = "test";
 	private String demoUserPasswordHash;
 	private String demoUserPasswordSalt;

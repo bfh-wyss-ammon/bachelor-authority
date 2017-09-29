@@ -5,7 +5,6 @@ import java.math.BigInteger;
 
 import keys.PublicKey;
 
-@Entity(dbTableName = "PublicKey")
 public class DbPublicKey implements PublicKey, Serializable {
 	/**
 	 * default serial version id
