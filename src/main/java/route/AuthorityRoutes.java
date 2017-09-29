@@ -5,7 +5,9 @@ import static spark.Spark.*;
 import java.io.Console;
 import java.math.BigInteger;
 import java.nio.file.Path;
+import java.security.PublicKey;
 import java.util.Date;
+import java.util.List;
 
 import javax.crypto.SecretKey;
 
@@ -15,7 +17,9 @@ import com.google.gson.GsonBuilder;
 import data.AuthoritySettings;
 import data.DbGroup;
 import data.DbJoinSession;
+import data.DbManagerKey;
 import data.DbMembership;
+import data.DbPublicKey;
 import data.DbUser;
 import demo.DemoSecretKey;
 import requests.JoinRequest;
@@ -23,6 +27,7 @@ import responses.JoinResponse;
 import util.BigIntegerGsonTypeAdapter;
 import util.Credential;
 import util.Database;
+import util.Generator;
 import util.GroupHelper;
 import util.JoinHelper;
 import util.MembershipHelper;
@@ -40,6 +45,8 @@ public class AuthorityRoutes {
 	}
 
 	public static void main(String[] args) {
+		
+		port(10000);
 
 		options("/*", (request, response) -> Route.ConfigureOptions(request, response));
 		before((request, response) -> Route.ConfigureBefore(request, response));
@@ -97,6 +104,13 @@ public class AuthorityRoutes {
 			response.status(Route.StatuscodeOk);
 			return "";
 			
+		});
+		
+get("/group", (request, response) -> {
+
+	List<DbGroup> groupList = Database.Get(DbGroup.class);
+	response.status(Route.StatuscodeOk);
+	return gson.toJson(groupList);		
 		});
 		
 		post("/group", (request, response) -> {
