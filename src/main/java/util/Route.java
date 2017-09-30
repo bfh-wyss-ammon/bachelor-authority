@@ -15,7 +15,7 @@ public class Route {
 	
 	public static final String TokenHeader = "x-custom-token";
 	
-	private static final String Origin = "http://localhost:8080";
+	private static final String Origin = SettingsHelper.getSettings().getAcceptedOrigin();
 	private static final String Methods = "POST, GET, PUT";
 	private static final String Headers = "Content-Type, x-custom-token";
 	

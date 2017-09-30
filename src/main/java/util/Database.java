@@ -62,6 +62,15 @@ public class Database {
 		return result;
 	}
 	
+	public static <T> List<T> Get(Class<T> t) {
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		List<T> list = (List<T>) session.createQuery("from " + getTableName(t)).list();
+		session.getTransaction().commit();
+		session.close();
+		return list;
+	}
+	
 	private static String getTableName(Class t) {
 		String name =  t.getSimpleName();
 		int i = name.lastIndexOf(".");
@@ -83,14 +92,6 @@ public class Database {
 		return count == 1;
 	}
 
-	public static <T> List<T> Get(Class<T> t) {
-		Session session = sessionFactory.openSession();
-		session.beginTransaction();
-		List<T> list = (List<T>) session.createQuery("from " + getTableName(t)).list();
-		session.getTransaction().commit();
-		session.close();
-		return list;
-	}
 
 	public static void Delete(Object entity) {
 		Session session = sessionFactory.openSession();

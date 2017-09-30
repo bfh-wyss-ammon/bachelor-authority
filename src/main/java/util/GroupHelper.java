@@ -14,4 +14,5 @@ public class GroupHelper {
 		return Database.Get(DbGroup.class, groupIdList.get(random.nextInt(groupIdList.size())));
 		
 	}
+	
 }
