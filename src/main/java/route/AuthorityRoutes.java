@@ -39,7 +39,8 @@ public class AuthorityRoutes {
 
 	public static void main(String[] args) {
 
-		port(10000);
+		//set the port this app is listening on. value from config.ß
+		port(SettingsHelper.getSettings().getPort());
 
 		options("/*", (request, response) -> Route.ConfigureOptions(request, response));
 		before((request, response) -> Route.ConfigureBefore(request, response));
