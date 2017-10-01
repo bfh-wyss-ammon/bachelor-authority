@@ -18,6 +18,7 @@ public class AuthoritySettings implements Settings {
 	@Expose
 	private int prime_certainty;
 	private String salt;
+	private int port;
 
 	public AuthoritySettings() {
 		this.modulus = 2048;
@@ -27,6 +28,7 @@ public class AuthoritySettings implements Settings {
 		this.le = 60;
 		this.prime_certainty = 100;
 		this.salt = "honolulu";
+		this.port = 10000;
 	}
 
 	public int getModulus() {
@@ -85,4 +87,11 @@ public class AuthoritySettings implements Settings {
 		this.salt = salt;
 	}
 
+	public int getPort() {
+		return port;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
+	}
 }
