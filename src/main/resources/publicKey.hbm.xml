@@ -4,34 +4,34 @@
 		<id name="publicKeyId" type="int" column="publicKeyId">
 			<generator class="identity" />
 		</id>
-		<property name="n" type="util.CustomBigIntegerType">
+		<property name="n" type="hibernate.BigIntegerType">
 			<column name="n" />
 		</property>
-		<property name="a" type="util.CustomBigIntegerType">
+		<property name="a" type="hibernate.BigIntegerType">
 			<column name="a" />
 		</property>
-		<property name="g" type="util.CustomBigIntegerType">
+		<property name="g" type="hibernate.BigIntegerType">
 			<column name="g" />
 		</property>
-		<property name="h" type="util.CustomBigIntegerType">
+		<property name="h" type="hibernate.BigIntegerType">
 			<column name="h" />
 		</property>
-		<property name="w" type="util.CustomBigIntegerType">
+		<property name="w" type="hibernate.BigIntegerType">
 			<column name="w" />
 		</property>
-		<property name="bigQ" type="util.CustomBigIntegerType">
+		<property name="bigQ" type="hibernate.BigIntegerType">
 			<column name="bigQ" />
 		</property>
-		<property name="bigP" type="util.CustomBigIntegerType">
+		<property name="bigP" type="hibernate.BigIntegerType">
 			<column name="bigP" />
 		</property>
-		<property name="bigF" type="util.CustomBigIntegerType">
+		<property name="bigF" type="hibernate.BigIntegerType">
 			<column name="bigF" />
 		</property>
-		<property name="bigG" type="util.CustomBigIntegerType">
+		<property name="bigG" type="hibernate.BigIntegerType">
 			<column name="bigG" />
 		</property>
-		<property name="bigH" type="util.CustomBigIntegerType">
+		<property name="bigH" type="hibernate.BigIntegerType">
 			<column name="bigH" />
 		</property>
 	</class>

@@ -1,10 +1,6 @@
 package util;
 
 import java.util.Date;
-
-import org.eclipse.jetty.server.session.JDBCSessionManager.Session;
-
-import data.DbGroup;
 import data.DbJoinSession;
 import data.DbUser;
 
@@ -13,9 +9,9 @@ public class SessionHelper {
 	public static DbJoinSession getSession(DbUser user) {
 
 		String where = "userId=" + user.getUserId();
-		
-		if (Database.Exists(DbJoinSession.class, where)) {
-			DbJoinSession session = Database.Get(DbJoinSession.class, where);
+
+		if (DatabaseHelper.Exists(DbJoinSession.class, where)) {
+			DbJoinSession session = DatabaseHelper.Get(DbJoinSession.class, where);
 			session.setCreated(new Date());
 			return session;
 		} else {
@@ -27,25 +23,25 @@ public class SessionHelper {
 			return session;
 		}
 	}
-	
+
 	public static DbJoinSession getSession(String token) {
-		String where = "token='" + token+ "'";
-		
-		if (token != null && Database.Exists(DbJoinSession.class, where)) {
-			DbJoinSession session = Database.Get(DbJoinSession.class, where);
+		String where = "token='" + token + "'";
+
+		if (token != null && DatabaseHelper.Exists(DbJoinSession.class, where)) {
+			DbJoinSession session = DatabaseHelper.Get(DbJoinSession.class, where);
 			session.setCreated(new Date());
 			return session;
 		}
 		return null;
 	}
-		
+
 	public static DbUser getUser(String token) {
-		String where = "token='" + token+ "'";
-		if(!Database.Exists(DbJoinSession.class, where)) {
-			// todo log?? 
+		String where = "token='" + token + "'";
+		if (!DatabaseHelper.Exists(DbJoinSession.class, where)) {
+			// todo log??
 			return null;
 		}
-		DbJoinSession session = Database.Get(DbJoinSession.class, where);
+		DbJoinSession session = DatabaseHelper.Get(DbJoinSession.class, where);
 		return session.getUser();
 	}
 

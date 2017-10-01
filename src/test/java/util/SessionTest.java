@@ -19,8 +19,8 @@ public class SessionTest {
 	
 	@Before
 	public void init() {
-		demoUserPasswordHash = Credential.GetHash(demoUserPassword);
-		demoUserPasswordSalt = Credential.securePassword(demoUserPasswordHash);
+		demoUserPasswordHash = CredentialHelper.GetHash(demoUserPassword);
+		demoUserPasswordSalt = CredentialHelper.securePassword(demoUserPasswordHash);
 	}
 	
 	@Test
@@ -31,12 +31,12 @@ public class SessionTest {
 	
 	@Test
 	public void createSession() {		
-		DbUser user = Database.Get(DbUser.class, 42);
+		DbUser user = DatabaseHelper.Get(DbUser.class, 42);
 		DbJoinSession session = null;
 		try {			
 			session = SessionHelper.getSession(user);
 			DbUser u3 = session.getUser();
-			Database.Save(DbJoinSession.class, session);
+			DatabaseHelper.Save(DbJoinSession.class, session);
 			
 			DbUser user2 = SessionHelper.getUser(session.getToken());
 			

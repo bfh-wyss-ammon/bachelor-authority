@@ -33,5 +33,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/CryptographyLibrary"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CommonLibrary"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

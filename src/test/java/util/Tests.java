@@ -28,8 +28,8 @@ public class Tests {
 	
 	@Before
 	public void init() {
-		demoUserPasswordHash = Credential.GetHash(demoUserPassword);
-		demoUserPasswordSalt = Credential.securePassword(demoUserPasswordHash);
+		demoUserPasswordHash = CredentialHelper.GetHash(demoUserPassword);
+		demoUserPasswordSalt = CredentialHelper.securePassword(demoUserPasswordHash);
 	}
 	
 	
@@ -45,36 +45,36 @@ public class Tests {
 		try {
 			user.setMail(demoUserMail);
 			user.setPassword(demoUserPasswordSalt);
-			Database.Save(DbUser.class, user);
+			DatabaseHelper.Save(DbUser.class, user);
 			assertNotNull(user.getUserId());
 						
 			Generator.generate(SettingsHelper.getSettings(), publicKey, managerKey);
 			
 			group.setManagerKey(managerKey);
 			group.setPublicKey(publicKey);
-			Database.Save(DbGroup.class, group);
+			DatabaseHelper.Save(DbGroup.class, group);
 			assertNotNull(group.getGroupId());
 			
 			membership.setGroup(group);
 			membership.setUser(user);
 			
-			Database.Save(DbMembership.class, membership);
+			DatabaseHelper.Save(DbMembership.class, membership);
 			
 			// SmartPhone A
 			SecretKey memberKeyA = new DemoSecretKey();
-			JoinHelper.init(SettingsHelper.getSettings(), Database.Get(DbPublicKey.class, publicKey.getPublicKeyId()), memberKeyA);
+			JoinHelper.init(SettingsHelper.getSettings(), DatabaseHelper.Get(DbPublicKey.class, publicKey.getPublicKeyId()), memberKeyA);
 
 			JoinRequest joinRequestA = new JoinRequest(memberKeyA);
 			
 
 			JoinResponse joinResponseA = JoinHelper.join(SettingsHelper.getSettings(), publicKey, managerKey, joinRequestA);
 			membership.setBigY(joinRequestA.bigY());
-			Database.Update(membership);
+			DatabaseHelper.Update(membership);
 			
 			memberKeyA.maintainResponse(joinResponseA);
 			membership.setApproved(true);
 			membership.setCreated(new Date());
-			Database.Update(membership);
+			DatabaseHelper.Update(membership);
 			
 			byte[] testmessage = new BigInteger("1990").toByteArray();
 
@@ -86,9 +86,9 @@ public class Tests {
 			
 		}
 		finally {
-			Database.Delete(membership);
-			Database.Delete(user);
-			Database.Delete(group);
+			DatabaseHelper.Delete(membership);
+			DatabaseHelper.Delete(user);
+			DatabaseHelper.Delete(group);
 		}
 		
 	}

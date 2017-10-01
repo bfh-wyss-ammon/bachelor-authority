@@ -6,18 +6,18 @@ import java.util.Base64;
 
 import data.DbUser;
 
-public class Credential {
+public class CredentialHelper {
 
 	public static Boolean IsValid(String mail, String hashPassword) {
 		String securePassword = GetHash(SettingsHelper.getSettings().getSalt() + hashPassword);
-		return Database.Exists(DbUser.class,  "email = '"+mail+"' AND password = '"+ securePassword +"'");
+		return DatabaseHelper.Exists(DbUser.class, "email = '" + mail + "' AND password = '" + securePassword + "'");
 	}
-	
+
 	public static DbUser getUser(String mail, String hashPassword) {
 		String securePassword = GetHash(SettingsHelper.getSettings().getSalt() + hashPassword);
-		return Database.Get(DbUser.class,  "email = '"+mail+"' AND password = '"+ securePassword +"'");
+		return DatabaseHelper.Get(DbUser.class, "email = '" + mail + "' AND password = '" + securePassword + "'");
 	}
-	
+
 	public static String securePassword(String hash) {
 		String securePassword = GetHash(SettingsHelper.getSettings().getSalt() + hash);
 		return securePassword;

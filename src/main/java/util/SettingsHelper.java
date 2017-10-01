@@ -21,21 +21,21 @@ public class SettingsHelper {
 			reader = new FileReader(filePath);
 			BufferedReader bufferedReader = new BufferedReader(reader);
 
-	        String line;
-	        String json = "";
+			String line;
+			String json = "";
 
-	        while ((line = bufferedReader.readLine()) != null) {
-	           json += line;
-	        }
-	        reader.close();
-	        return gson.fromJson(json, AuthoritySettings.class);
-	        
+			while ((line = bufferedReader.readLine()) != null) {
+				json += line;
+			}
+			reader.close();
+			return gson.fromJson(json, AuthoritySettings.class);
+
 		} catch (Exception e) {
 			// TODO ex handling
 			e.printStackTrace();
 		}
 		return null;
-        
+
 	}
 
 	public static void saveSettings(AuthoritySettings settings) {
