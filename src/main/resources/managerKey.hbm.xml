@@ -4,13 +4,13 @@
 		<id name="managerKeyId" type="int" column="managerKeyId">
 			<generator class="identity" />
 		</id>
-		<property name="Xg" type="util.CustomBigIntegerType">
+		<property name="Xg" type="hibernate.BigIntegerType">
 			<column name="Xg" />
 		</property>
-		<property name="p" type="util.CustomBigIntegerType">
+		<property name="p" type="hibernate.BigIntegerType">
 			<column name="p" />
 		</property>
-		<property name="q" type="util.CustomBigIntegerType">
+		<property name="q" type="hibernate.BigIntegerType">
 			<column name="q" />
 		</property>
 	</class>

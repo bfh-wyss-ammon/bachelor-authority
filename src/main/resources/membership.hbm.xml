@@ -6,7 +6,7 @@
 		</id>
 		<many-to-one name="user" class="data.DbUser" column="userId" unique="true" not-null="true" lazy="false" />
 		<many-to-one name="group" class="data.DbGroup" column="groupId" unique="true" not-null="true" lazy="false" />
-		<property name="bigY" type="util.CustomBigIntegerType">
+		<property name="bigY" type="hibernate.BigIntegerType">
 			<column name="bigY" />
 		</property>
 		<property name="approved">
