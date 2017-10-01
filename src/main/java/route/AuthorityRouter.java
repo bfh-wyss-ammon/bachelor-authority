@@ -2,6 +2,8 @@ package route;
 
 import static spark.Spark.*;
 import java.util.Date;
+import java.util.List;
+
 import data.AuthoritySettings;
 import data.DbGroup;
 import data.DbJoinSession;
@@ -23,7 +25,7 @@ import util.SettingsHelper;
 public class AuthorityRouter extends BaseRouter implements Router {
 
 	public AuthorityRouter() {
-		super(1000);
+		super(SettingsHelper.getSettings().getPort());
 	}
 
 	@Override
@@ -63,7 +65,7 @@ public class AuthorityRouter extends BaseRouter implements Router {
 			return "";
 		});
 
-		put("/group", (request, response) -> {
+		put("/membership", (request, response) -> {
 
 			DbJoinSession session = SessionHelper.getSession(request.headers(Consts.TokenHeader));
 			if (session == null) {
@@ -84,7 +86,7 @@ public class AuthorityRouter extends BaseRouter implements Router {
 
 		});
 
-		post("/group", (request, response) -> {
+		post("/membership", (request, response) -> {
 
 			DbJoinSession session = SessionHelper.getSession(request.headers(Consts.TokenHeader));
 			if (session == null) {
@@ -110,6 +112,12 @@ public class AuthorityRouter extends BaseRouter implements Router {
 			response.status(Consts.HttpStatuscodeOk);
 			return gson.toJson(joinResponse);
 
+		});
+
+		get("/group", (request, response) -> {
+			List<DbGroup> groupList = DatabaseHelper.Get(DbGroup.class);
+			response.status(Consts.HttpStatuscodeOk);
+			return gson.toJson(groupList);
 		});
 
 		post("/login", (request, response) -> {
