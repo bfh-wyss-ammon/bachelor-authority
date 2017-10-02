@@ -1,4 +1,4 @@
-import route.AuthorityRouter;
+import router.AuthorityRouter;
 
 public class Main {
 

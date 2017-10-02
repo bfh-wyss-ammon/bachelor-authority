@@ -1,4 +1,4 @@
-package route;
+package router;
 
 import static spark.Spark.*;
 import java.util.Date;

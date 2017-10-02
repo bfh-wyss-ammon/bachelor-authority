@@ -1,6 +1,7 @@
 package util;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import com.google.gson.Gson;
@@ -18,6 +19,10 @@ public class SettingsHelper {
 	public static AuthoritySettings getSettings() {
 		FileReader reader;
 		try {
+			File f = new File(filePath);
+			if(!f.exists()) {
+				return new AuthoritySettings();
+			}
 			reader = new FileReader(filePath);
 			BufferedReader bufferedReader = new BufferedReader(reader);
 
