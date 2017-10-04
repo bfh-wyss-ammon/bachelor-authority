@@ -28,7 +28,7 @@ public class AuthoritySettings implements Settings {
 		this.le = 60;
 		this.prime_certainty = 100;
 		this.salt = "honolulu";
-		this.port = 10000;
+		this.port = 4567;
 	}
 
 	public int getModulus() {
