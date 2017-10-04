@@ -3,12 +3,7 @@ package router;
 import static spark.Spark.*;
 import java.util.Date;
 import java.util.List;
-
-import org.eclipse.jetty.server.Authentication.User;
-import org.hibernate.boot.model.relational.Database;
-
 import com.google.gson.Gson;
-
 import data.AuthoritySettings;
 import data.DbGroup;
 import data.DbJoinSession;

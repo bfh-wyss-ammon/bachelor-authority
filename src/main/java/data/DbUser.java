@@ -8,6 +8,7 @@ public class DbUser {
 
 	@Expose
 	private String mail;
+	@Expose(serialize = false, deserialize = true)
 	private String password;
 
 	public DbUser() {
