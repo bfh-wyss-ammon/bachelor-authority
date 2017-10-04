@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 import java.math.BigInteger;
 import java.util.Date;
 
+import org.eclipse.jetty.server.Authentication.User;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,6 +33,10 @@ public class Tests {
 		demoUserPasswordSalt = CredentialHelper.securePassword(demoUserPasswordHash);
 	}
 	
+	@Test
+	public void userLoading() {
+		assertNotNull(DatabaseHelper.Get(DbUser.class));
+	}
 	
 	
 	@Test

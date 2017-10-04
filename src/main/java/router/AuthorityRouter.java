@@ -4,6 +4,11 @@ import static spark.Spark.*;
 import java.util.Date;
 import java.util.List;
 
+import org.eclipse.jetty.server.Authentication.User;
+import org.hibernate.boot.model.relational.Database;
+
+import com.google.gson.Gson;
+
 import data.AuthoritySettings;
 import data.DbGroup;
 import data.DbJoinSession;
@@ -61,6 +66,42 @@ public class AuthorityRouter extends BaseRouter implements Router {
 			} else {
 				response.status(Consts.HttpStatuscodeOk);
 				return gson.toJson(settings);
+			}
+			return "";
+		});
+
+		get("/users", (request, response) -> {
+			response.status(Consts.HttpStatuscodeOk);
+			return gson.toJson(DatabaseHelper.Get(DbUser.class));
+		});
+
+		post("/users/:id", (request, response) -> {
+			try {
+				String password = request.body();
+				int id = Integer.parseInt(request.params(":id"));
+				DbUser user = DatabaseHelper.Get(DbUser.class, id);
+				user.setPassword(CredentialHelper.securePassword(CredentialHelper.GetHash(password)));
+
+				DatabaseHelper.Update(user);
+
+				response.status(Consts.HttpStatuscodeOk);
+			} catch (Exception e) {
+				// todo error handling
+				response.status(Consts.HttpInternalServerError);
+			}
+			return "";
+		});
+
+		post("/users", (request, response) -> {
+			try {
+				DbUser user = new Gson().fromJson(request.body(), DbUser.class);
+				user.setPassword(CredentialHelper.securePassword(CredentialHelper.GetHash(user.getPassword())));
+				DatabaseHelper.Save(DbUser.class, user);
+
+				response.status(Consts.HttpStatuscodeOk);
+			} catch (Exception e) {
+				// todo error handling
+				response.status(Consts.HttpInternalServerError);
 			}
 			return "";
 		});
