@@ -30,77 +30,7 @@ public class AuthorityRouter extends BaseRouter implements Router {
 
 	@Override
 	public void start() {
-		// TODO Auto-generated method stub
-		get("/settings", (request, response) -> {
-			AuthoritySettings settings = SettingsHelper.getSettings();
-			if (settings == null) {
-				response.status(Consts.HttpInternalServerError);
-			} else {
-				response.status(Consts.HttpStatuscodeOk);
-				return gson.toJson(settings);
-			}
-			return "";
-		});
-
-		put("/settings", (request, response) -> {
-			AuthoritySettings settings = (AuthoritySettings) gson.fromJson(request.body(), AuthoritySettings.class);
-			if (settings == null) {
-				response.status(Consts.HttpConflict);
-			} else {
-				SettingsHelper.saveSettings(settings);
-			}
-			return "";
-		});
-
-		post("/settings", (request, response) -> {
-			AuthoritySettings settings = new AuthoritySettings();
-			SettingsHelper.saveSettings(settings);
-			settings = SettingsHelper.getSettings();
-			if (settings == null) {
-				response.status(Consts.HttpInternalServerError);
-			} else {
-				response.status(Consts.HttpStatuscodeOk);
-				return gson.toJson(settings);
-			}
-			return "";
-		});
-
-		get("/users", (request, response) -> {
-			response.status(Consts.HttpStatuscodeOk);
-			return gson.toJson(DatabaseHelper.Get(DbUser.class));
-		});
-
-		post("/users/:id", (request, response) -> {
-			try {
-				String password = request.body();
-				int id = Integer.parseInt(request.params(":id"));
-				DbUser user = DatabaseHelper.Get(DbUser.class, id);
-				user.setPassword(CredentialHelper.securePassword(CredentialHelper.GetHash(password)));
-
-				DatabaseHelper.Update(user);
-
-				response.status(Consts.HttpStatuscodeOk);
-			} catch (Exception e) {
-				// todo error handling
-				response.status(Consts.HttpInternalServerError);
-			}
-			return "";
-		});
-
-		post("/users", (request, response) -> {
-			try {
-				DbUser user = new Gson().fromJson(request.body(), DbUser.class);
-				user.setPassword(CredentialHelper.securePassword(CredentialHelper.GetHash(user.getPassword())));
-				DatabaseHelper.Save(DbUser.class, user);
-
-				response.status(Consts.HttpStatuscodeOk);
-			} catch (Exception e) {
-				// todo error handling
-				response.status(Consts.HttpInternalServerError);
-			}
-			return "";
-		});
-
+		
 		put("/membership", (request, response) -> {
 
 			DbJoinSession session = SessionHelper.getSession(request.headers(Consts.TokenHeader));

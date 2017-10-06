@@ -3,13 +3,20 @@ package data;
 import java.math.BigInteger;
 import java.util.Date;
 
+import com.google.gson.annotations.Expose;
+
 public class DbMembership {
 
 	private int membershipId;
+	@Expose
 	private DbUser user;
+	@Expose
 	private DbGroup group;
+	@Expose
 	private BigInteger bigY;
+	@Expose
 	private Boolean approved;
+	@Expose
 	private Date created;
 
 	
