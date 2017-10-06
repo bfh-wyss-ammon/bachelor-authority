@@ -85,7 +85,7 @@ public class PortalRouter extends BaseRouter implements Router {
 			DbPublicKey publicKey = new DbPublicKey();
 			DbManagerKey managerKey = new DbManagerKey();
 			DbGroup group = new DbGroup();
-			Generator.generate(SettingsHelper.getSettings(), publicKey, managerKey);
+			Generator.generate(SettingsHelper.getSettings(AuthoritySettings.class), publicKey, managerKey);
 			
 			group.setManagerKey(managerKey);
 			group.setPublicKey(publicKey);

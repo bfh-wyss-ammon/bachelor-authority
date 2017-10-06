@@ -15,6 +15,7 @@ import data.DbManagerKey;
 import data.DbPublicKey;
 import data.DbMembership;
 import data.DbUser;
+import data.AuthoritySettings;
 import data.BaseSignature;
 import demo.DemoSecretKey;
 import keys.SecretKey;
@@ -54,7 +55,7 @@ public class Tests {
 			DatabaseHelper.Save(DbUser.class, user);
 			assertNotNull(user.getUserId());
 						
-			Generator.generate(SettingsHelper.getSettings(), publicKey, managerKey);
+			Generator.generate(SettingsHelper.getSettings(AuthoritySettings.class), publicKey, managerKey);
 			
 			group.setManagerKey(managerKey);
 			group.setPublicKey(publicKey);
@@ -68,12 +69,12 @@ public class Tests {
 			
 			// SmartPhone A
 			SecretKey memberKeyA = new DemoSecretKey();
-			JoinHelper.init(SettingsHelper.getSettings(), DatabaseHelper.Get(DbPublicKey.class, publicKey.getPublicKeyId()), memberKeyA);
+			JoinHelper.init(SettingsHelper.getSettings(AuthoritySettings.class), DatabaseHelper.Get(DbPublicKey.class, publicKey.getPublicKeyId()), memberKeyA);
 
 			JoinRequest joinRequestA = new JoinRequest(memberKeyA);
 			
 
-			JoinResponse joinResponseA = JoinHelper.join(SettingsHelper.getSettings(), publicKey, managerKey, joinRequestA);
+			JoinResponse joinResponseA = JoinHelper.join(SettingsHelper.getSettings(AuthoritySettings.class), publicKey, managerKey, joinRequestA);
 			membership.setBigY(joinRequestA.bigY());
 			DatabaseHelper.Update(membership);
 			
@@ -86,9 +87,9 @@ public class Tests {
 
 			BaseSignature signatureA = new BaseSignature();
 			
-			SignHelper.sign(SettingsHelper.getSettings(), memberKeyA, publicKey, testmessage, signatureA);
+			SignHelper.sign(SettingsHelper.getSettings(AuthoritySettings.class), memberKeyA, publicKey, testmessage, signatureA);
 
-			assertTrue(VerifyHelper.verify(SettingsHelper.getSettings(), publicKey, signatureA, testmessage));
+			assertTrue(VerifyHelper.verify(SettingsHelper.getSettings(AuthoritySettings.class), publicKey, signatureA, testmessage));
 
 			
 			

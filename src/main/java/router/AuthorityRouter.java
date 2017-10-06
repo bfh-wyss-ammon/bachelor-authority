@@ -25,7 +25,7 @@ import util.SettingsHelper;
 public class AuthorityRouter extends BaseRouter implements Router {
 
 	public AuthorityRouter() {
-		super(SettingsHelper.getSettings().getPort());
+		super(SettingsHelper.getSettings(AuthoritySettings.class).getPort());
 	}
 
 	@Override
@@ -84,6 +84,23 @@ public class AuthorityRouter extends BaseRouter implements Router {
 			List<DbGroup> groupList = DatabaseHelper.Get(DbGroup.class);
 			response.status(Consts.HttpStatuscodeOk);
 			return gson.toJson(groupList);
+		});
+		
+		get("/groups/:id", (request, response) -> {
+			try {
+				int id = Integer.parseInt(request.params(":id"));
+				DbGroup group = DatabaseHelper.Get(DbGroup.class, id);
+				if (group == null) {
+					response.status(Consts.HttpBadRequest);
+					return "";
+				}
+				response.status(Consts.HttpStatuscodeOk);
+				return gson.toJson(group);
+			} catch (Exception e) {
+				// todo error handling
+				response.status(Consts.HttpInternalServerError);
+			}
+			return "";
 		});
 
 		post("/login", (request, response) -> {

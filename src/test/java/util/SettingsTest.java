@@ -12,13 +12,13 @@ public class SettingsTest {
 	public void testSave() {
 		AuthoritySettings settings = new AuthoritySettings();
 		
-		SettingsHelper.saveSettings(settings);
+		SettingsHelper.saveSettings(AuthoritySettings.class,settings);
 		
 	}
 	
 	@Test
 	public void testRead() {
-		AuthoritySettings settings =SettingsHelper.getSettings();
+		AuthoritySettings settings =SettingsHelper.getSettings(AuthoritySettings.class);
 		assertNotNull(settings);
 	}
 }
