@@ -15,6 +15,7 @@ import data.DbManagerKey;
 import data.DbPublicKey;
 import data.DbMembership;
 import data.DbUser;
+import data.BaseSignature;
 import demo.DemoSecretKey;
 import keys.SecretKey;
 import requests.JoinRequest;
@@ -83,7 +84,9 @@ public class Tests {
 			
 			byte[] testmessage = new BigInteger("1990").toByteArray();
 
-			Signature signatureA = SignHelper.sign(SettingsHelper.getSettings(), memberKeyA, publicKey, testmessage);
+			BaseSignature signatureA = new BaseSignature();
+			
+			SignHelper.sign(SettingsHelper.getSettings(), memberKeyA, publicKey, testmessage, signatureA);
 
 			assertTrue(VerifyHelper.verify(SettingsHelper.getSettings(), publicKey, signatureA, testmessage));
 

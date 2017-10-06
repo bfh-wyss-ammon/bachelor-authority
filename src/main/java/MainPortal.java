@@ -1,10 +1,11 @@
 import router.AuthorityRouter;
+import router.PortalRouter;
 
-public class Main {
+public class MainPortal {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		new AuthorityRouter().start();
+		new PortalRouter().start();
 	}
 
 }
