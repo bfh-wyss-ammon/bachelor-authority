@@ -35,7 +35,7 @@
   {"latitude": "47.3556759700", "longitude": "8.0062134690","time": "1920"},
   {"latitude": "47.3565351600", "longitude": "8.0259615630","time": "1980"},
   {"latitude": "47.3573943500", "longitude": "8.0457096560","time": "2040"},
-  {"latitude": "47.3582535500", "longitude": "8.065457750","time": "2100"},
+  {"latitude": "47.3582535500", "longitude": "8.0654577500","time": "2100"},
   {"latitude": "47.3591127400", "longitude": "8.0852058440","time": "2160"},
   {"latitude": "47.3599719400", "longitude": "8.1049539380","time": "2220"},
   {"latitude": "47.3608311300", "longitude": "8.1247020310","time": "2280"},
@@ -62,13 +62,10 @@
   {"latitude": "47.3780150000", "longitude": "8.5394120000","time": "3520"}
 },
   "bern_lausanne": {
-  {"latitude": {},"longitude": {},"created": {}},
+ {"latitude": "46.9487870000", "longitude": "7.4375080000","time": "0"}
 },
   "lausanne_aigle": {
-  {"latitude": {},"longitude": {},"created": {}},
-  {"latitude": {},"longitude": {},"created": {}},
-
-
+ {"latitude": "46.9487870000", "longitude": "7.4375080000","time": "0"}
 }
 }
 
