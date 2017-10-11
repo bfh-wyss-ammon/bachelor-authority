@@ -5,6 +5,7 @@ import java.util.List;
 import org.eclipse.jetty.websocket.api.*;
 import org.eclipse.jetty.websocket.api.annotations.*;
 
+import data.AuthoritySettings;
 import data.DbGroup;
 import data.DbManagerKey;
 import data.DbPublicKey;
@@ -48,7 +49,7 @@ public class GroupCreateSocketHandler {
 						DbPublicKey publicKey = new DbPublicKey();
 						DbManagerKey managerKey = new DbManagerKey();
 						DbGroup group = new DbGroup();
-						Generator.generate(SettingsHelper.getSettings(), publicKey, managerKey);
+						Generator.generate(SettingsHelper.getSettings(AuthoritySettings.class), publicKey, managerKey);
 
 						group.setManagerKey(managerKey);
 						group.setPublicKey(publicKey);
