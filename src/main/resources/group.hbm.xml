@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hibernate-mapping>
-	<class name="data.DbGroup" table="CyrptoGroup">
+	<class name="data.DbGroup" table="CryptoGroup">
 		<id name="groupId" type="int" column="groupId">
 			<generator class="identity" />
 		</id>
