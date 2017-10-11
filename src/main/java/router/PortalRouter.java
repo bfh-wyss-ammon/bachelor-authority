@@ -140,7 +140,6 @@ public class PortalRouter extends BaseRouter implements Router {
 			response.status(Consts.HttpStatuscodeOk);
 			return gson.toJson(DatabaseHelper.Get(DbGroup.class));
 		});
-		
 	}
 
 }

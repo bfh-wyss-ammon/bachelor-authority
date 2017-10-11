@@ -4,22 +4,23 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Base64;
 
+import data.AuthoritySettings;
 import data.DbUser;
 
 public class CredentialHelper {
 
 	public static Boolean IsValid(String mail, String hashPassword) {
-		String securePassword = GetHash(SettingsHelper.getSettings().getSalt() + hashPassword);
+		String securePassword = GetHash(SettingsHelper.getSettings(AuthoritySettings.class).getSalt() + hashPassword);
 		return DatabaseHelper.Exists(DbUser.class, "email = '" + mail + "' AND password = '" + securePassword + "'");
 	}
 
 	public static DbUser getUser(String mail, String hashPassword) {
-		String securePassword = GetHash(SettingsHelper.getSettings().getSalt() + hashPassword);
+		String securePassword = GetHash(SettingsHelper.getSettings(AuthoritySettings.class).getSalt() + hashPassword);
 		return DatabaseHelper.Get(DbUser.class, "email = '" + mail + "' AND password = '" + securePassword + "'");
 	}
 
 	public static String securePassword(String hash) {
-		String securePassword = GetHash(SettingsHelper.getSettings().getSalt() + hash);
+		String securePassword = GetHash(SettingsHelper.getSettings(AuthoritySettings.class).getSalt() + hash);
 		return securePassword;
 	}
 
