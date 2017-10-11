@@ -1,4 +1,3 @@
-import router.AuthorityRouter;
 import router.PortalRouter;
 
 public class MainPortal {
@@ -7,5 +6,4 @@ public class MainPortal {
 		// TODO Auto-generated method stub
 		new PortalRouter().start();
 	}
-
 }

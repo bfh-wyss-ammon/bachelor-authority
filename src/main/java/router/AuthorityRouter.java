@@ -53,7 +53,6 @@ public class AuthorityRouter extends BaseRouter implements Router {
 		});
 
 		post("/membership", (request, response) -> {
-
 			DbJoinSession session = SessionHelper.getSession(request.headers(Consts.TokenHeader));
 			if (session == null) {
 				response.status(Consts.HttpStatuscodeUnauthorized);
@@ -89,7 +88,7 @@ public class AuthorityRouter extends BaseRouter implements Router {
 		post("/login", (request, response) -> {
 			try {
 				DbUser user = (DbUser) gson.fromJson(request.body(), DbUser.class);
-				user = CredentialHelper.getUser(user.getMail(), user.getPassword());
+				user = CredentialHelper.getUser(user.getId(), user.getPassword());
 
 				if (user == null) {
 					response.status(Consts.HttpStatuscodeUnauthorized);

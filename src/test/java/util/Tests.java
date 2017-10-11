@@ -5,8 +5,6 @@ import static org.junit.Assert.*;
 
 import java.math.BigInteger;
 import java.util.Date;
-
-import org.eclipse.jetty.server.Authentication.User;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,7 +18,6 @@ import demo.DemoSecretKey;
 import keys.SecretKey;
 import requests.JoinRequest;
 import responses.JoinResponse;
-import signatures.Signature;
 
 public class Tests {
 	private String demoUserMail = "test@user.ch";
@@ -49,7 +46,7 @@ public class Tests {
 		DbMembership membership = new DbMembership();
 		membership.setApproved(false);
 		try {
-			user.setMail(demoUserMail);
+			user.setId(demoUserMail);
 			user.setPassword(demoUserPasswordSalt);
 			DatabaseHelper.Save(DbUser.class, user);
 			assertNotNull(user.getUserId());
