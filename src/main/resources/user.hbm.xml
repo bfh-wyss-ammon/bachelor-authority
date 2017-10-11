@@ -7,8 +7,14 @@
         <property name="password">
             <column name="password"/>
         </property>
-        <property name="mail">
-            <column name="email"/>
+        <property name="id">
+            <column name="id"/>
+        </property>
+        <property name="firstname">
+            <column name="firstname"/>
+        </property>
+        <property name="lastname">
+            <column name="lastname"/>
         </property>
     </class>
 </hibernate-mapping>
