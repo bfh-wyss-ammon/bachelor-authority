@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import data.DbGroup;
-import data.DbJoinSession;
+import data.DbSession;
 import data.DbMembership;
 import data.DbUser;
 
@@ -32,11 +32,11 @@ public class SessionTest {
 	@Test
 	public void createSession() {		
 		DbUser user = DatabaseHelper.Get(DbUser.class, 42);
-		DbJoinSession session = null;
+		DbSession session = null;
 		try {			
 			session = SessionHelper.getSession(user);
 			DbUser u3 = session.getUser();
-			DatabaseHelper.Save(DbJoinSession.class, session);
+			DatabaseHelper.Save(DbSession.class, session);
 			
 			DbUser user2 = SessionHelper.getUser(session.getToken());
 			

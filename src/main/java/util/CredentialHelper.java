@@ -18,6 +18,12 @@ public class CredentialHelper {
 		String securePassword = GetHash(SettingsHelper.getSettings(AuthoritySettings.class).getSalt() + hashPassword);
 		return DatabaseHelper.Get(DbUser.class, "id = '" + id + "' AND password = '" + securePassword + "'");
 	}
+	
+	public static Boolean loadUser(DbUser user) {
+		String securePassword = GetHash(SettingsHelper.getSettings(AuthoritySettings.class).getSalt() + user.getPassword());
+		user = DatabaseHelper.Get(DbUser.class, "id = '" + user.getId() + "' AND password = '" + securePassword + "'");
+		return user != null;
+	}
 
 	public static String securePassword(String hash) {
 		String securePassword = GetHash(SettingsHelper.getSettings(AuthoritySettings.class).getSalt() + hash);

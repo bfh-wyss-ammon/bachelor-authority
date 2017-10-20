@@ -2,18 +2,18 @@ package data;
 
 import java.util.Date;
 
-public class DbJoinSession {
-	private int joinSessionId;
+public class DbSession {
+	private int sessionId;
 	private DbUser user;
 	private String token;
 	private Date created;
 
 	public int getJoinSessionId() {
-		return joinSessionId;
+		return sessionId;
 	}
 
 	public void setJoinSessionId(int joinSessionId) {
-		this.joinSessionId = joinSessionId;
+		this.sessionId = joinSessionId;
 	}
 
 	public DbUser getUser() {

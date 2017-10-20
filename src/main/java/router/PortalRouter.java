@@ -25,7 +25,7 @@ import com.google.gson.GsonBuilder;
 import data.AuthoritySettings;
 import data.BaseSignature;
 import data.DbGroup;
-import data.DbJoinSession;
+import data.DbSession;
 import data.DbManagerKey;
 import data.DbMembership;
 import data.DbPublicKey;

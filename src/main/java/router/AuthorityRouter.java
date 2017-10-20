@@ -6,7 +6,7 @@ import java.util.List;
 import com.google.gson.Gson;
 import data.AuthoritySettings;
 import data.DbGroup;
-import data.DbJoinSession;
+import data.DbSession;
 import data.DbMembership;
 import data.DbUser;
 import requests.JoinRequest;
@@ -30,10 +30,10 @@ public class AuthorityRouter extends BaseRouter implements Router {
 
 	@Override
 	public void start() {
-		
+
 		put("/membership", (request, response) -> {
 
-			DbJoinSession session = SessionHelper.getSession(request.headers(Consts.TokenHeader));
+			DbSession session = SessionHelper.getSession(request.headers(Consts.TokenHeader));
 			if (session == null) {
 				response.status(Consts.HttpStatuscodeUnauthorized);
 				return "";
@@ -53,7 +53,7 @@ public class AuthorityRouter extends BaseRouter implements Router {
 		});
 
 		post("/membership", (request, response) -> {
-			DbJoinSession session = SessionHelper.getSession(request.headers(Consts.TokenHeader));
+			DbSession session = SessionHelper.getSession(request.headers(Consts.TokenHeader));
 			if (session == null) {
 				response.status(Consts.HttpStatuscodeUnauthorized);
 				return "";
@@ -84,7 +84,7 @@ public class AuthorityRouter extends BaseRouter implements Router {
 			response.status(Consts.HttpStatuscodeOk);
 			return gson.toJson(groupList);
 		});
-		
+
 		get("/groups/:id", (request, response) -> {
 			try {
 				int id = Integer.parseInt(request.params(":id"));
@@ -105,23 +105,22 @@ public class AuthorityRouter extends BaseRouter implements Router {
 		post("/login", (request, response) -> {
 			try {
 				DbUser user = (DbUser) gson.fromJson(request.body(), DbUser.class);
-				if (user == null || !CredentialHelper.IsValid(user.getId(), user.getPassword())) {
+				if (user == null && !CredentialHelper.loadUser(user)) {
 					response.status(Consts.HttpStatuscodeUnauthorized);
 					return "";
 				}
-				user = CredentialHelper.getUser(user.getId(), user.getPassword());
 
 				DbMembership membership = MembershipHelper.getMembership(user);
 				if (membership != null && membership.getApproved()) {
 					response.status(Consts.HttpNotImplemented);
 					return "";
 				}
-				if(membership != null && !membership.getApproved()) {
+				if (membership != null && !membership.getApproved()) {
 					DatabaseHelper.Delete(membership);
 				}
 
 				DbGroup group = GroupHelper.getGroup();
-				DbJoinSession session = SessionHelper.getSession(user);
+				DbSession session = SessionHelper.getSession(user);
 				membership = new DbMembership(user, group);
 				DatabaseHelper.Save(DbMembership.class, membership);
 				DatabaseHelper.SaveOrUpdate(session);
