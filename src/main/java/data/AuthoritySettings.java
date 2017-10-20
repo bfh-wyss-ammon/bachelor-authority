@@ -19,6 +19,8 @@ public class AuthoritySettings implements Settings {
 	private int prime_certainty;
 	private String salt;
 	private int port;
+	private int portalPort;
+	private int joinSessionTimeout;
 
 	public AuthoritySettings() {
 		this.modulus = 2048;
@@ -29,6 +31,8 @@ public class AuthoritySettings implements Settings {
 		this.prime_certainty = 100;
 		this.salt = "honolulu";
 		this.port = 10000;
+		this.portalPort = 10009;
+		this.joinSessionTimeout = 1800;
 	}
 
 	public int getModulus() {
@@ -93,5 +97,19 @@ public class AuthoritySettings implements Settings {
 
 	public void setPort(int port) {
 		this.port = port;
+	}
+	public int getPortalPort() {
+		return portalPort;
+	}
+
+	public void setPortalPort(int portalPort) {
+		this.portalPort = portalPort;
+	}
+	public int getJoinSessionTimeout() {
+		return joinSessionTimeout;
+	}
+
+	public void setJoinSessionTimeout(int joinSessionTimeout) {
+		this.joinSessionTimeout = joinSessionTimeout;
 	}
 }

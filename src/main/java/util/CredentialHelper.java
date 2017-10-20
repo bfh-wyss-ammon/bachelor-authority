@@ -9,14 +9,20 @@ import data.DbUser;
 
 public class CredentialHelper {
 
-	public static Boolean IsValid(String mail, String hashPassword) {
+	public static Boolean IsValid(String id, String hashPassword) {
 		String securePassword = GetHash(SettingsHelper.getSettings(AuthoritySettings.class).getSalt() + hashPassword);
-		return DatabaseHelper.Exists(DbUser.class, "email = '" + mail + "' AND password = '" + securePassword + "'");
+		return DatabaseHelper.Exists(DbUser.class, "id = '" + id + "' AND password = '" + securePassword + "'");
 	}
 
-	public static DbUser getUser(String mail, String hashPassword) {
+	public static DbUser getUser(String id, String hashPassword) {
 		String securePassword = GetHash(SettingsHelper.getSettings(AuthoritySettings.class).getSalt() + hashPassword);
-		return DatabaseHelper.Get(DbUser.class, "email = '" + mail + "' AND password = '" + securePassword + "'");
+		return DatabaseHelper.Get(DbUser.class, "id = '" + id + "' AND password = '" + securePassword + "'");
+	}
+	
+	public static Boolean loadUser(DbUser user) {
+		String securePassword = GetHash(SettingsHelper.getSettings(AuthoritySettings.class).getSalt() + user.getPassword());
+		user = DatabaseHelper.Get(DbUser.class, "id = '" + user.getId() + "' AND password = '" + securePassword + "'");
+		return user != null;
 	}
 
 	public static String securePassword(String hash) {
