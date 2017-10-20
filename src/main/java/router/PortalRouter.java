@@ -53,7 +53,7 @@ import websocket.GroupCreateSocketHandler;
 public class PortalRouter extends BaseRouter implements Router {
 	
 	public PortalRouter() {
-		super(10009);
+		super(SettingsHelper.getSettings(AuthoritySettings.class).getPortalPort());
 		gson = new GsonBuilder().registerTypeAdapter(BigInteger.class, new BigIntegerTypeAdapter()).create();
 	}
 
@@ -90,7 +90,7 @@ public class PortalRouter extends BaseRouter implements Router {
 			DatabaseHelper.Save(DbMembership.class, membership);
 
 			SecretKey memberKey = new DemoSecretKey();
-			JoinHelper.init(SettingsHelper.getSettings(), group.getPublicKey(), memberKey);
+			JoinHelper.init(SettingsHelper.getSettings(AuthoritySettings.class), group.getPublicKey(), memberKey);
 
 			JoinRequest joinRequest = new JoinRequest(memberKey);
 

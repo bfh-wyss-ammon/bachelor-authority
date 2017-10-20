@@ -105,21 +105,24 @@ public class AuthorityRouter extends BaseRouter implements Router {
 		post("/login", (request, response) -> {
 			try {
 				DbUser user = (DbUser) gson.fromJson(request.body(), DbUser.class);
-				user = CredentialHelper.getUser(user.getId(), user.getPassword());
-
-				if (user == null) {
+				if (user == null || !CredentialHelper.IsValid(user.getId(), user.getPassword())) {
 					response.status(Consts.HttpStatuscodeUnauthorized);
 					return "";
 				}
+				user = CredentialHelper.getUser(user.getId(), user.getPassword());
 
-				if (MembershipHelper.getMembership(user) != null) {
+				DbMembership membership = MembershipHelper.getMembership(user);
+				if (membership != null && membership.getApproved()) {
 					response.status(Consts.HttpNotImplemented);
 					return "";
+				}
+				if(membership != null && !membership.getApproved()) {
+					DatabaseHelper.Delete(membership);
 				}
 
 				DbGroup group = GroupHelper.getGroup();
 				DbJoinSession session = SessionHelper.getSession(user);
-				DbMembership membership = new DbMembership(user, group);
+				membership = new DbMembership(user, group);
 				DatabaseHelper.Save(DbMembership.class, membership);
 				DatabaseHelper.SaveOrUpdate(session);
 
