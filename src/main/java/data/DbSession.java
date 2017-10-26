@@ -8,11 +8,11 @@ public class DbSession {
 	private String token;
 	private Date created;
 
-	public int getJoinSessionId() {
+	public int getSessionId() {
 		return sessionId;
 	}
 
-	public void setJoinSessionId(int joinSessionId) {
+	public void setSessionId(int joinSessionId) {
 		this.sessionId = joinSessionId;
 	}
 
