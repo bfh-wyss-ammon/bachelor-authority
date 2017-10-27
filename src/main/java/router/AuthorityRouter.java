@@ -105,10 +105,11 @@ public class AuthorityRouter extends BaseRouter implements Router {
 		post("/login", (request, response) -> {
 			try {
 				DbUser user = (DbUser) gson.fromJson(request.body(), DbUser.class);
-				if (user == null && !CredentialHelper.loadUser(user)) {
+				if (user == null || !CredentialHelper.IsValid(user.getId(), user.getPassword())) {
 					response.status(Consts.HttpStatuscodeUnauthorized);
 					return "";
 				}
+				user = CredentialHelper.getUser(user.getId(), user.getPassword());
 
 				DbMembership membership = MembershipHelper.getMembership(user);
 				if (membership != null && membership.getApproved()) {

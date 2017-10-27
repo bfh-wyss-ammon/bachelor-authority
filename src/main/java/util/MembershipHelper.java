@@ -1,6 +1,9 @@
 package util;
 
 import data.DbSession;
+
+import java.util.Date;
+
 import data.DbMembership;
 import data.DbUser;
 
@@ -8,7 +11,13 @@ public class MembershipHelper {
 
 	public static DbMembership getMembership(DbUser user) {
 		String where = "userId=" + user.getUserId();
-		return DatabaseHelper.Get(DbMembership.class, where);
+
+		if (DatabaseHelper.Exists(DbMembership.class, where)) {
+			return DatabaseHelper.Get(DbMembership.class, where);
+		} else {
+
+			return null;
+		}
 
 	}
 }
