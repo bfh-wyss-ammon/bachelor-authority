@@ -33,6 +33,14 @@ public class Tests {
 	}
 	
 	@Test
+	public void loadMembership() {
+		DbMembership ship =DatabaseHelper.Get(DbMembership.class, "userId = 9");
+		
+		assertNotNull(ship);
+		
+	}
+	
+	@Test
 	public void userLoading() {
 		assertNotNull(DatabaseHelper.Get(DbUser.class));
 	}

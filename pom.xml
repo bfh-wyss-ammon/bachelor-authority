@@ -64,6 +64,7 @@
 					</execution>
 				</executions>
 				<configuration>
+					<skipTests>true</skipTests>
 					<archive>
 						<manifest>
 							<mainClass>common.Main</mainClass>
