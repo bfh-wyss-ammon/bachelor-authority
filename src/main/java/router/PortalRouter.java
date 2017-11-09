@@ -38,6 +38,7 @@ import requests.JoinRequest;
 import responses.JoinResponse;
 import rest.BaseRouter;
 import rest.Router;
+import settings.DefaultSettings;
 import util.Consts;
 import util.CredentialHelper;
 import util.DatabaseHelper;
@@ -90,7 +91,7 @@ public class PortalRouter extends BaseRouter implements Router {
 			DatabaseHelper.Save(DbMembership.class, membership);
 
 			SecretKey memberKey = new DemoSecretKey();
-			JoinHelper.init(SettingsHelper.getSettings(AuthoritySettings.class), group.getPublicKey(), memberKey);
+			JoinHelper.init(SettingsHelper.getSettings(DefaultSettings.class), group.getPublicKey(), memberKey);
 
 			JoinRequest joinRequest = new JoinRequest(memberKey);
 
