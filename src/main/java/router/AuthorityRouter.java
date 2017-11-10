@@ -12,7 +12,6 @@ import data.DbUser;
 import requests.JoinRequest;
 import responses.JoinResponse;
 import rest.BaseRouter;
-import rest.Router;
 import util.Consts;
 import util.CredentialHelper;
 import util.DatabaseHelper;
@@ -21,87 +20,22 @@ import util.JoinHelper;
 import util.MembershipHelper;
 import util.SessionHelper;
 import util.SettingsHelper;
+import websocket.GroupCreateSocketHandler;
 
-public class AuthorityRouter extends BaseRouter implements Router {
+public class AuthorityRouter extends BaseRouter {
 
 	public AuthorityRouter() {
 		super(SettingsHelper.getSettings(AuthoritySettings.class).getPort());
 	}
 
 	@Override
-	public void start() {
+	public void WebSockets() {
+		webSocket("/sockets/groups", GroupCreateSocketHandler.class);
+	}
 
-		put("/membership", (request, response) -> {
-
-			DbSession session = SessionHelper.getSession(request.headers(Consts.TokenHeader));
-			if (session == null) {
-				response.status(Consts.HttpStatuscodeUnauthorized);
-				return "";
-			}
-
-			DbMembership membership = MembershipHelper.getMembership(session.getUser());
-			if (membership == null || membership.getApproved()) {
-				response.status(Consts.HttpBadRequest);
-				return "";
-			}
-
-			membership.setApproved(true);
-			DatabaseHelper.Update(membership);
-			response.status(Consts.HttpStatuscodeOk);
-			return "";
-
-		});
-
-		post("/membership", (request, response) -> {
-			DbSession session = SessionHelper.getSession(request.headers(Consts.TokenHeader));
-			if (session == null) {
-				response.status(Consts.HttpStatuscodeUnauthorized);
-				return "";
-			}
-
-			JoinRequest joinRequest = (JoinRequest) gson.fromJson(request.body(), JoinRequest.class);
-			if (joinRequest == null || !joinRequest.IsComplete()) {
-				response.status(Consts.HttpBadRequest);
-				return "";
-			}
-
-			DbMembership membership = MembershipHelper.getMembership(session.getUser());
-			membership.setBigY(joinRequest.bigY());
-
-			JoinResponse joinResponse = JoinHelper.join(membership.getGroup().getPublicKey(),
-					membership.getGroup().getManagerKey(), joinRequest);
-
-			DatabaseHelper.SaveOrUpdate(membership);
-			session.setCreated(new Date());
-			DatabaseHelper.Update(session);
-			response.status(Consts.HttpStatuscodeOk);
-			return gson.toJson(joinResponse);
-
-		});
-
-		get("/group", (request, response) -> {
-			List<DbGroup> groupList = DatabaseHelper.Get(DbGroup.class);
-			response.status(Consts.HttpStatuscodeOk);
-			return gson.toJson(groupList);
-		});
-
-		get("/groups/:id", (request, response) -> {
-			try {
-				int id = Integer.parseInt(request.params(":id"));
-				DbGroup group = DatabaseHelper.Get(DbGroup.class, id);
-				if (group == null) {
-					response.status(Consts.HttpBadRequest);
-					return "";
-				}
-				response.status(Consts.HttpStatuscodeOk);
-				return gson.toJson(group);
-			} catch (Exception e) {
-				// todo error handling
-				response.status(Consts.HttpInternalServerError);
-			}
-			return "";
-		});
-
+	@Override
+	public void Routes() {
+		
 		post("/login", (request, response) -> {
 			try {
 				DbUser user = (DbUser) gson.fromJson(request.body(), DbUser.class);
@@ -135,6 +69,127 @@ public class AuthorityRouter extends BaseRouter implements Router {
 			}
 			return "";
 		});
+
+		put("/memberships", (request, response) -> {
+			DbSession session = SessionHelper.getSession(request.headers(Consts.TokenHeader));
+			if (session == null) {
+				response.status(Consts.HttpStatuscodeUnauthorized);
+				return "";
+			}
+
+			DbMembership membership = MembershipHelper.getMembership(session.getUser());
+			if (membership == null || membership.getApproved()) {
+				response.status(Consts.HttpBadRequest);
+				return "";
+			}
+
+			membership.setApproved(true);
+			DatabaseHelper.Update(membership);
+			response.status(Consts.HttpStatuscodeOk);
+			return "";
+
+		});
+
+		post("/memberships", (request, response) -> {
+			DbSession session = SessionHelper.getSession(request.headers(Consts.TokenHeader));
+			if (session == null) {
+				response.status(Consts.HttpStatuscodeUnauthorized);
+				return "";
+			}
+
+			JoinRequest joinRequest = (JoinRequest) gson.fromJson(request.body(), JoinRequest.class);
+			if (joinRequest == null || !joinRequest.IsComplete()) {
+				response.status(Consts.HttpBadRequest);
+				return "";
+			}
+
+			DbMembership membership = MembershipHelper.getMembership(session.getUser());
+			membership.setBigY(joinRequest.bigY());
+
+			JoinResponse joinResponse = JoinHelper.join(membership.getGroup().getPublicKey(),
+					membership.getGroup().getManagerKey(), joinRequest);
+
+			DatabaseHelper.SaveOrUpdate(membership);
+			session.setCreated(new Date());
+			DatabaseHelper.Update(session);
+			response.status(Consts.HttpStatuscodeOk);
+			return gson.toJson(joinResponse);
+
+		});
+		
+		get("/groups/:id", (request, response) -> {
+			try {
+				int id = Integer.parseInt(request.params(":id"));
+				DbGroup group = DatabaseHelper.Get(DbGroup.class, id);
+				if (group == null) {
+					response.status(Consts.HttpBadRequest);
+					return "";
+				}
+				response.status(Consts.HttpStatuscodeOk);
+				return gson.toJson(group);
+			} catch (Exception e) {
+				// todo error handling
+				response.status(Consts.HttpInternalServerError);
+			}
+			return "";
+		});
 	}
 
+	@Override
+	public void ProtectedRoutes() {
+	
+		get("/groups", (request, response) -> {
+			List<DbGroup> groupList = DatabaseHelper.Get(DbGroup.class);
+			response.status(Consts.HttpStatuscodeOk);
+			return new Gson().toJson(groupList);
+		});
+
+		get("/users", (request, response) -> {
+			response.status(Consts.HttpStatuscodeOk);
+			return gson.toJson(DatabaseHelper.Get(DbUser.class));
+		});
+
+		get("/membership", (request, response) -> {
+			response.status(Consts.HttpStatuscodeOk);
+			return gson.toJson(DatabaseHelper.Get(DbMembership.class));
+		});
+
+		post("/users", (request, response) -> {
+			try {
+				DbUser user = new Gson().fromJson(request.body(), DbUser.class);
+				user.setPassword(CredentialHelper.securePassword(CredentialHelper.GetHash(user.getPassword())));
+				DatabaseHelper.Save(DbUser.class, user);
+
+				response.status(Consts.HttpStatuscodeOk);
+			} catch (Exception e) {
+				// todo error handling
+				response.status(Consts.HttpInternalServerError);
+			}
+			return "";
+		});
+
+		post("/users/:id", (request, response) -> {
+			try {
+				String password = request.body();
+				int id = Integer.parseInt(request.params(":id"));
+				DbUser user = DatabaseHelper.Get(DbUser.class, id);
+				user.setPassword(CredentialHelper.securePassword(CredentialHelper.GetHash(password)));
+
+				DatabaseHelper.Update(user);
+
+				response.status(Consts.HttpStatuscodeOk);
+			} catch (Exception e) {
+				// todo error handling
+				response.status(Consts.HttpInternalServerError);
+			}
+			return "";
+		});
+	}
+
+	public static void main(String[] args) {
+		new AuthorityRouter();
+		
+		// note (pa): just a useless request to warmup hibernate
+		DatabaseHelper.Exists(DbGroup.class, "groupId = 1");
+	}
 }
