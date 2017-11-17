@@ -6,12 +6,14 @@ public class AuthoritySettings {
 	private int port;
 	private int portalPort;
 	private int joinSessionTimeout;
+	private String token;
 
 	public AuthoritySettings() {
 		this.salt = "honolulu";
 		this.port = 10000;
 		this.portalPort = 10009;
 		this.joinSessionTimeout = 1800;
+		this.token = "7596b176-c54a-11e7-abc4-cec278b6b50a";
 	}
 
 	public String getSalt() {
@@ -45,4 +47,14 @@ public class AuthoritySettings {
 	public void setJoinSessionTimeout(int joinSessionTimeout) {
 		this.joinSessionTimeout = joinSessionTimeout;
 	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+	
+	
 }

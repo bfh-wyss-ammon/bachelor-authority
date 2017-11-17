@@ -32,12 +32,13 @@ import util.MembershipHelper;
 import util.OpenHelper;
 import util.SessionHelper;
 import util.SettingsHelper;
+import util.VerifyHelper;
 import websocket.GroupCreateSocketHandler;
 
 public class AuthorityRouter extends BaseRouter {
 
 	public AuthorityRouter() {
-		super(SettingsHelper.getSettings(AuthoritySettings.class).getPort());
+		super(SettingsHelper.getSettings(AuthoritySettings.class).getPort(), SettingsHelper.getSettings(AuthoritySettings.class).getToken());
 	}
 
 	@Override
@@ -187,14 +188,29 @@ public class AuthorityRouter extends BaseRouter {
 				// check T (how much every user paid)
 				for (PaymentTuple tuple : resolveRequest.getT()) {
 					byte[] message = Base64.getDecoder().decode(tuple.getHash());
+										
 					int position = OpenHelper.open(gpk, gsmk, message, tuple.getUserSignature(), yList);
+					
+					System.out.println("postion T:" + position);
+					
+					if(position == -1) {
+						response.status(Consts.HttpBadRequest);
+						return "";
+					}
 					tollPaid[position] += tuple.getTollPaid();
 				}
 
 				// check S (how much every user has to pay)
 				for (ResolveTuple tuple : resolveRequest.getS()) {
+					
 					byte[] message = Base64.getDecoder().decode(tuple.getHash());
 					int position = OpenHelper.open(gpk, gsmk, message, tuple.getSignature(), yList);
+					System.out.println("postion S:" + position);
+					
+					if(position == -1) {
+						response.status(Consts.HttpBadRequest);
+						return "";
+					}
 					tollDue[position] += tuple.getPrice();
 				}
 
