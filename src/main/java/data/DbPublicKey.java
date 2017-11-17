@@ -5,6 +5,7 @@ import java.math.BigInteger;
 
 import com.google.gson.annotations.Expose;
 
+import interfaces.HashValue;
 import keys.PublicKey;
 
 public class DbPublicKey implements PublicKey, Serializable {
@@ -16,24 +17,34 @@ public class DbPublicKey implements PublicKey, Serializable {
 	private Integer publicKeyId;
 
 	@Expose
+	@HashValue
 	private BigInteger n;
 	@Expose
+	@HashValue
 	private BigInteger a;
 	@Expose
+	@HashValue
 	private BigInteger g;
 	@Expose
+	@HashValue
 	private BigInteger h;
 	@Expose
+	@HashValue
 	private BigInteger w;
 	@Expose
+	@HashValue
 	private BigInteger bigQ;
 	@Expose
+	@HashValue
 	private BigInteger bigP;
 	@Expose
+	@HashValue
 	private BigInteger bigF;
 	@Expose
+	@HashValue
 	private BigInteger bigG;
 	@Expose
+	@HashValue
 	private BigInteger bigH;
 
 	public BigInteger getN() {

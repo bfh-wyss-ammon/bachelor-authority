@@ -1,14 +1,25 @@
 package router;
 
 import static spark.Spark.*;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import com.google.gson.Gson;
 import data.AuthoritySettings;
 import data.DbGroup;
+import data.DbManagerKey;
 import data.DbSession;
 import data.DbMembership;
+import data.DbPublicKey;
+import data.Discrepancy;
+import data.PaymentTuple;
 import data.DbUser;
+import data.ResolveRequest;
+import data.ResolveResult;
+import data.ResolveTuple;
 import requests.JoinRequest;
 import responses.JoinResponse;
 import rest.BaseRouter;
@@ -18,14 +29,16 @@ import util.DatabaseHelper;
 import util.GroupHelper;
 import util.JoinHelper;
 import util.MembershipHelper;
+import util.OpenHelper;
 import util.SessionHelper;
 import util.SettingsHelper;
+import util.VerifyHelper;
 import websocket.GroupCreateSocketHandler;
 
 public class AuthorityRouter extends BaseRouter {
 
 	public AuthorityRouter() {
-		super(SettingsHelper.getSettings(AuthoritySettings.class).getPort());
+		super(SettingsHelper.getSettings(AuthoritySettings.class).getPort(), SettingsHelper.getSettings(AuthoritySettings.class).getToken());
 	}
 
 	@Override
@@ -35,7 +48,7 @@ public class AuthorityRouter extends BaseRouter {
 
 	@Override
 	public void Routes() {
-		
+
 		post("/login", (request, response) -> {
 			try {
 				DbUser user = (DbUser) gson.fromJson(request.body(), DbUser.class);
@@ -116,7 +129,7 @@ public class AuthorityRouter extends BaseRouter {
 			return gson.toJson(joinResponse);
 
 		});
-		
+
 		get("/groups/:id", (request, response) -> {
 			try {
 				int id = Integer.parseInt(request.params(":id"));
@@ -133,11 +146,101 @@ public class AuthorityRouter extends BaseRouter {
 			}
 			return "";
 		});
+
+		post("/dispute", (request, response) -> {
+			try {
+				ResolveRequest resolveRequest = (ResolveRequest) gson.fromJson(request.body(), ResolveRequest.class);
+				if (resolveRequest == null || resolveRequest.getDisputeSessionId() == null
+						|| resolveRequest.getGroupId() == 0 || resolveRequest.getS() == null
+						|| resolveRequest.getT() == null || resolveRequest.getProviderSignature() == null) {
+					response.status(Consts.HttpBadRequest);
+					return "";
+				}
+
+				List<Discrepancy> discrepancies = new ArrayList<Discrepancy>();
+				ResolveResult resolveResult = new ResolveResult();
+
+				// get the group from DB
+				DbGroup group = DatabaseHelper.Get(DbGroup.class, resolveRequest.getGroupId());
+				if (group == null) {
+					response.status(Consts.HttpBadRequest);
+					return "";
+				}
+				DbManagerKey gsmk = group.getManagerKey();
+				DbPublicKey gpk = group.getPublicKey();
+				List<DbMembership> memberships = DatabaseHelper.GetList(DbMembership.class,
+						"groupId= '" + group.getGroupId() + "'");
+
+				// initalize arrays
+				BigInteger[] yList = new BigInteger[memberships.size()];
+				int[] tollDue = new int[memberships.size()];
+				int[] tollPaid = new int[memberships.size()];
+				String[] users = new String[memberships.size()];
+
+				// get the identifying elements
+				int i = 0;
+				for (DbMembership ship : memberships) {
+					yList[i] = ship.getBigY();
+					users[i] = ship.getUser().getId();
+					i++;
+				}
+
+				// check T (how much every user paid)
+				for (PaymentTuple tuple : resolveRequest.getT()) {
+					byte[] message = Base64.getDecoder().decode(tuple.getHash());
+										
+					int position = OpenHelper.open(gpk, gsmk, message, tuple.getUserSignature(), yList);
+					
+					System.out.println("postion T:" + position);
+					
+					if(position == -1) {
+						response.status(Consts.HttpBadRequest);
+						return "";
+					}
+					tollPaid[position] += tuple.getTollPaid();
+				}
+
+				// check S (how much every user has to pay)
+				for (ResolveTuple tuple : resolveRequest.getS()) {
+					
+					byte[] message = Base64.getDecoder().decode(tuple.getHash());
+					int position = OpenHelper.open(gpk, gsmk, message, tuple.getSignature(), yList);
+					System.out.println("postion S:" + position);
+					
+					if(position == -1) {
+						response.status(Consts.HttpBadRequest);
+						return "";
+					}
+					tollDue[position] += tuple.getPrice();
+				}
+
+				// now calculate how much every user has left to pay
+				for (int j = 0; j < yList.length; j++) {
+					if (tollDue[j] > tollPaid[j]) {
+						Discrepancy dis = new Discrepancy();
+						dis.setUserId(users[j]);
+						dis.setDeltaToll(tollDue[j] - tollPaid[j]);
+						discrepancies.add(dis);
+					}
+				}
+
+				resolveResult.setAuthoritySignature("haha to be done TODO");
+				resolveResult.setDisputeSessionId(resolveRequest.getDisputeSessionId());
+				resolveResult.setRes(discrepancies);
+				response.status(Consts.HttpStatuscodeOk);
+				return gson.toJson(resolveResult);
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				response.status(Consts.HttpBadRequest);
+			}
+			return "";
+		});
 	}
 
 	@Override
 	public void ProtectedRoutes() {
-	
+
 		get("/groups", (request, response) -> {
 			List<DbGroup> groupList = DatabaseHelper.Get(DbGroup.class);
 			response.status(Consts.HttpStatuscodeOk);
@@ -188,7 +291,7 @@ public class AuthorityRouter extends BaseRouter {
 
 	public static void main(String[] args) {
 		new AuthorityRouter();
-		
+
 		// note (pa): just a useless request to warmup hibernate
 		DatabaseHelper.Exists(DbGroup.class, "groupId = 1");
 	}
