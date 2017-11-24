@@ -15,18 +15,22 @@ import data.DbSession;
 import data.DbMembership;
 import data.DbPublicKey;
 import data.Discrepancy;
+import data.InvoiceItems;
 import data.PaymentTuple;
 import data.DbUser;
 import data.ResolveRequest;
 import data.ResolveResult;
 import data.ResolveTuple;
+import data.Tuple;
 import requests.JoinRequest;
 import responses.JoinResponse;
 import rest.BaseRouter;
+import util.AuthoritySignatureHelper;
 import util.Consts;
 import util.CredentialHelper;
 import util.DatabaseHelper;
 import util.GroupHelper;
+import util.HashHelper;
 import util.JoinHelper;
 import util.MembershipHelper;
 import util.OpenHelper;
@@ -38,7 +42,8 @@ import websocket.GroupCreateSocketHandler;
 public class AuthorityRouter extends BaseRouter {
 
 	public AuthorityRouter() {
-		super(SettingsHelper.getSettings(AuthoritySettings.class).getPort(), SettingsHelper.getSettings(AuthoritySettings.class).getToken());
+		super(SettingsHelper.getSettings(AuthoritySettings.class).getPort(),
+				SettingsHelper.getSettings(AuthoritySettings.class).getToken());
 	}
 
 	@Override
@@ -166,12 +171,21 @@ public class AuthorityRouter extends BaseRouter {
 					response.status(Consts.HttpBadRequest);
 					return "";
 				}
+
+				// check the provider signature on resolve request
+				byte[] requestSigBytes = Base64.getDecoder().decode(resolveRequest.getProviderSignature());
+				byte[] requestProvidermessage = HashHelper.getHash(resolveRequest);
+				if (!AuthoritySignatureHelper.verifyProviderMessage(requestProvidermessage, requestSigBytes)) {
+					response.status(Consts.HttpBadRequest);
+					return "";
+				}
+
 				DbManagerKey gsmk = group.getManagerKey();
 				DbPublicKey gpk = group.getPublicKey();
 				List<DbMembership> memberships = DatabaseHelper.GetList(DbMembership.class,
 						"groupId= '" + group.getGroupId() + "'");
 
-				// initalize arrays
+				// initialize arrays
 				BigInteger[] yList = new BigInteger[memberships.size()];
 				int[] tollDue = new int[memberships.size()];
 				int[] tollPaid = new int[memberships.size()];
@@ -187,13 +201,26 @@ public class AuthorityRouter extends BaseRouter {
 
 				// check T (how much every user paid)
 				for (PaymentTuple tuple : resolveRequest.getT()) {
+
+					InvoiceItems items = new InvoiceItems();
+					for (String hash : tuple.getTupleHashlist()) {
+						items.getItems().put(hash, 1);
+					}
+					items.setSessionId(tuple.getSessionId());
+					String providerSignature = tuple.getProviderSignature();
+					byte[] lSigBytes = Base64.getDecoder().decode(providerSignature);
+					byte[] lProvidermessage = HashHelper.getHash(items);
+
+					// check if provider signature on invoice items is valid
+					if (!AuthoritySignatureHelper.verifyProviderMessage(lProvidermessage, lSigBytes)) {
+						response.status(Consts.HttpBadRequest);
+						return "";
+					}
+
 					byte[] message = Base64.getDecoder().decode(tuple.getHash());
-										
 					int position = OpenHelper.open(gpk, gsmk, message, tuple.getUserSignature(), yList);
-					
-					System.out.println("postion T:" + position);
-					
-					if(position == -1) {
+
+					if (position == -1) {
 						response.status(Consts.HttpBadRequest);
 						return "";
 					}
@@ -202,12 +229,12 @@ public class AuthorityRouter extends BaseRouter {
 
 				// check S (how much every user has to pay)
 				for (ResolveTuple tuple : resolveRequest.getS()) {
-					
+
 					byte[] message = Base64.getDecoder().decode(tuple.getHash());
 					int position = OpenHelper.open(gpk, gsmk, message, tuple.getSignature(), yList);
 					System.out.println("postion S:" + position);
-					
-					if(position == -1) {
+
+					if (position == -1) {
 						response.status(Consts.HttpBadRequest);
 						return "";
 					}
@@ -224,9 +251,15 @@ public class AuthorityRouter extends BaseRouter {
 					}
 				}
 
-				resolveResult.setAuthoritySignature("haha to be done TODO");
+				//set payload
 				resolveResult.setDisputeSessionId(resolveRequest.getDisputeSessionId());
 				resolveResult.setRes(discrepancies);
+				
+				// sign transaction
+				byte[] sigBytes = AuthoritySignatureHelper.sign(HashHelper.getHash(resolveResult));
+				String authoritySignature = Base64.getEncoder().encodeToString(sigBytes);
+				resolveResult.setAuthoritySignature(authoritySignature);
+				
 				response.status(Consts.HttpStatuscodeOk);
 				return gson.toJson(resolveResult);
 
