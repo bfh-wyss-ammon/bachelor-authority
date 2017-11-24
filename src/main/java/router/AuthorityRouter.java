@@ -53,6 +53,11 @@ public class AuthorityRouter extends BaseRouter {
 
 	@Override
 	public void Routes() {
+		
+		get("/status",  (request, response) -> {
+			response.status(Consts.HttpStatuscodeOk);
+			return "";
+		});
 
 		post("/login", (request, response) -> {
 			try {
