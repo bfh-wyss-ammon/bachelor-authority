@@ -1,11 +1,13 @@
+/**
+ * This websocket class handles the generation of new signature groups via the web application.
+ */
+
 package websocket;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.jetty.websocket.api.*;
 import org.eclipse.jetty.websocket.api.annotations.*;
-
-import data.AuthoritySettings;
 import data.DbGroup;
 import data.DbManagerKey;
 import data.DbPublicKey;
@@ -14,13 +16,11 @@ import util.DatabaseHelper;
 import util.Generator;
 import util.SettingsHelper;
 
-
 @WebSocket
 public class GroupCreateSocketHandler {
-	
+
 	Thread groupCreateThread;
-	
-		
+
 	static List<Session> sessions = new ArrayList<>();
 
 	@OnWebSocketConnect
@@ -39,10 +39,9 @@ public class GroupCreateSocketHandler {
 		String code = message.toLowerCase();
 		if (code.equals("status")) {
 			send(user, getStatus());
-		}
-		else if(code.equals("new")) {
+		} else if (code.equals("new")) {
 			// at the moment we allow only to create on group per time
-			if(groupCreateThread == null || !groupCreateThread.isAlive()) {
+			if (groupCreateThread == null || !groupCreateThread.isAlive()) {
 				groupCreateThread = new Thread(new Runnable() {
 					@Override
 					public void run() {
@@ -62,11 +61,11 @@ public class GroupCreateSocketHandler {
 			}
 		}
 	}
-	
+
 	private String getStatus() {
 		return (groupCreateThread != null && groupCreateThread.isAlive() ? "running" : "ready");
 	}
-	
+
 	private void send(String text) {
 		sessions.forEach(session -> {
 			send(session, text);

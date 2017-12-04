@@ -1,3 +1,7 @@
+/**
+ * This helper class has static methods that apply the salt to the received passwords and gets the users from database.
+ */
+
 package util;
 
 import java.nio.charset.StandardCharsets;

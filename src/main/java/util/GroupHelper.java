@@ -1,3 +1,7 @@
+/**
+ * This helper class selects a random group from the database for the set-up protocol.
+ */
+
 package util;
 
 import java.util.List;

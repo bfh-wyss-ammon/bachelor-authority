@@ -1,3 +1,7 @@
+/**
+ * This is the main executable class of the authority. It specifies how the API-Paths work.
+ */
+
 package router;
 
 import static spark.Spark.*;
@@ -251,15 +255,15 @@ public class AuthorityRouter extends BaseRouter {
 					}
 				}
 
-				//set payload
+				// set payload
 				resolveResult.setDisputeSessionId(resolveRequest.getDisputeSessionId());
 				resolveResult.setRes(discrepancies);
-				
+
 				// sign transaction
 				byte[] sigBytes = AuthoritySignatureHelper.sign(HashHelper.getHash(resolveResult));
 				String authoritySignature = Base64.getEncoder().encodeToString(sigBytes);
 				resolveResult.setAuthoritySignature(authoritySignature);
-				
+
 				response.status(Consts.HttpStatuscodeOk);
 				return gson.toJson(resolveResult);
 

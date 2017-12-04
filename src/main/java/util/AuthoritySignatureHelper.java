@@ -1,3 +1,7 @@
+/**
+ * This helper class has static methods that generate the signatures from the authority (used on the dispute resolving protocol result).
+ */
+
 package util;
 import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
