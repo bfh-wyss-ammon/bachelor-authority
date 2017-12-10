@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ch.ti.bfh.bachelor2017.mps</groupId>
 	<artifactId>Authority</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -49,6 +49,17 @@
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20160810</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.ti.bfh.bachelor2017.mps</groupId>
+			  <artifactId>CryptographyLibrary</artifactId>
+			  <version>1.0.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>ch.ti.bfh.bachelor2017.mps</groupId>
+			<artifactId>CommonLibrary</artifactId>
+			<version>1.0.0</version>
 		</dependency>
 	</dependencies>
 	<build>
