@@ -1,3 +1,7 @@
+/**
+ * This is the main executable class of the authority. It specifies how the API-Paths work.
+ */
+
 package router;
 
 import static spark.Spark.*;
@@ -32,6 +36,7 @@ import util.DatabaseHelper;
 import util.GroupHelper;
 import util.HashHelper;
 import util.JoinHelper;
+import util.Logger;
 import util.MembershipHelper;
 import util.OpenHelper;
 import util.SessionHelper;
@@ -57,6 +62,14 @@ public class AuthorityRouter extends BaseRouter {
 		get("/status",  (request, response) -> {
 			response.status(Consts.HttpStatuscodeOk);
 			return "";
+		});
+
+		post("/providerpublickey", (request, response) -> {
+
+			AuthoritySettings settings = SettingsHelper.getSettings(AuthoritySettings.class);
+			response.status(Consts.HttpStatuscodeOk);
+			return settings.getProviderPublicKey();
+
 		});
 
 		post("/login", (request, response) -> {
@@ -89,6 +102,7 @@ public class AuthorityRouter extends BaseRouter {
 
 			} catch (Exception ex) {
 				response.status(Consts.HttpStatuscodeUnauthorized);
+				Logger.errorLogger(ex);
 			}
 			return "";
 		});
@@ -150,9 +164,10 @@ public class AuthorityRouter extends BaseRouter {
 				}
 				response.status(Consts.HttpStatuscodeOk);
 				return gson.toJson(group);
-			} catch (Exception e) {
+			} catch (Exception ex) {
 				// todo error handling
 				response.status(Consts.HttpInternalServerError);
+				Logger.errorLogger(ex);
 			}
 			return "";
 		});
@@ -256,21 +271,23 @@ public class AuthorityRouter extends BaseRouter {
 					}
 				}
 
-				//set payload
+				// set payload
 				resolveResult.setDisputeSessionId(resolveRequest.getDisputeSessionId());
 				resolveResult.setRes(discrepancies);
-				
+
 				// sign transaction
 				byte[] sigBytes = AuthoritySignatureHelper.sign(HashHelper.getHash(resolveResult));
 				String authoritySignature = Base64.getEncoder().encodeToString(sigBytes);
 				resolveResult.setAuthoritySignature(authoritySignature);
-				
+
 				response.status(Consts.HttpStatuscodeOk);
 				return gson.toJson(resolveResult);
 
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				response.status(Consts.HttpBadRequest);
+				Logger.errorLogger(ex);
+
 			}
 			return "";
 		});
@@ -302,9 +319,10 @@ public class AuthorityRouter extends BaseRouter {
 				DatabaseHelper.Save(DbUser.class, user);
 
 				response.status(Consts.HttpStatuscodeOk);
-			} catch (Exception e) {
+			} catch (Exception ex) {
 				// todo error handling
 				response.status(Consts.HttpInternalServerError);
+				Logger.errorLogger(ex);
 			}
 			return "";
 		});
@@ -319,9 +337,10 @@ public class AuthorityRouter extends BaseRouter {
 				DatabaseHelper.Update(user);
 
 				response.status(Consts.HttpStatuscodeOk);
-			} catch (Exception e) {
+			} catch (Exception ex) {
 				// todo error handling
 				response.status(Consts.HttpInternalServerError);
+				Logger.errorLogger(ex);
 			}
 			return "";
 		});

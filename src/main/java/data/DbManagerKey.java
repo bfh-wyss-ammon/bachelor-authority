@@ -1,3 +1,7 @@
+/**
+ * This class stores the data related to the group manager key (gsmk) in the database of the authority.
+ */
+
 package data;
 
 import java.io.Serializable;

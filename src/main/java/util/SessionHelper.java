@@ -1,3 +1,7 @@
+/**
+ * This helper class has static methods that handle the generation, loading and timeout of sessions of the set-up protocol.
+ */
+
 package util;
 
 import java.util.ArrayList;
@@ -42,7 +46,7 @@ public class SessionHelper {
 	private static void cleanSessions(int SessionTimeout) {
 		Date now = new Date();
 		Date limit = new Date(now.getTime() - SessionTimeout * 1000);
-		DatabaseHelper.Delete(DbSession.class, "created",limit);
+		DatabaseHelper.Delete(DbSession.class, "created", limit);
 		return;
 	}
 

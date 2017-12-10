@@ -1,3 +1,7 @@
+/**
+ * This class stores the data that forms the public key of a signature group in the database of the authority.
+ */
+
 package data;
 
 import java.io.Serializable;

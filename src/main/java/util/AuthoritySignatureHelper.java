@@ -1,3 +1,7 @@
+/**
+ * This helper class has static methods that generate the signatures from the authority (used on the dispute resolving protocol result).
+ */
+
 package util;
 import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -21,8 +25,9 @@ public class AuthoritySignatureHelper {
 			sig.update(message);
 			return sig.verify(signature);
 			
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			Logger.errorLogger(ex);
 			return false;
 		}
 	}
@@ -39,8 +44,10 @@ try {
 	        signature.update(message);
 	        sigBytes = signature.sign();
 			
-		}catch (Exception e) {
-			e.printStackTrace();
+		}catch (Exception ex) {
+			ex.printStackTrace();
+			Logger.errorLogger(ex);
+
 			
 		}
 

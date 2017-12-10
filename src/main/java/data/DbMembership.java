@@ -1,3 +1,7 @@
+/**
+ * This class stores the data related to the membership of a user in a signature group. This includes the identifying element of the member.
+ */
+
 package data;
 
 import java.math.BigInteger;
@@ -19,8 +23,6 @@ public class DbMembership {
 	@Expose
 	private Date created;
 
-	
-	
 	public int getMembershipId() {
 		return membershipId;
 	}
@@ -28,8 +30,6 @@ public class DbMembership {
 	public DbMembership() {
 		super();
 	}
-	
-	
 
 	public DbMembership(DbUser user, DbGroup group) {
 		super();

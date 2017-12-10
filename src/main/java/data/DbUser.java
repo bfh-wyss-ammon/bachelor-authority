@@ -1,3 +1,7 @@
+/**
+ * This class stores the data about the users of the mobility pricing system.
+ */
+
 package data;
 
 import com.google.gson.annotations.Expose;

@@ -1,3 +1,7 @@
+/**
+ * This helper class has static methods that apply the salt to the received passwords and gets the users from database.
+ */
+
 package util;
 
 import java.nio.charset.StandardCharsets;
@@ -36,6 +40,8 @@ public class CredentialHelper {
 			return Base64.getEncoder().encodeToString(hash);
 		} catch (Exception ex) {
 			System.out.print("Credential.GetHash: Error" + ex.getMessage());
+			Logger.errorLogger(ex);
+
 		}
 		return "";
 	}

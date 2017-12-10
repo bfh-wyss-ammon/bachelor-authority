@@ -1,6 +1,5 @@
 package util;
 
-
 import static org.junit.Assert.*;
 
 import java.math.BigInteger;
@@ -26,86 +25,120 @@ public class Tests {
 	private String demoUserPassword = "test";
 	private String demoUserPasswordHash;
 	private String demoUserPasswordSalt;
-	
+	DbUser user = new DbUser();
+
 	@Before
 	public void init() {
 		demoUserPasswordHash = CredentialHelper.GetHash(demoUserPassword);
 		demoUserPasswordSalt = CredentialHelper.securePassword(demoUserPasswordHash);
+		user.setPassword(demoUserPasswordSalt);
+		user.setFirstname("Best Test");
+		user.setLastname("Ever");
+		user.setId(demoUserMail);
+		DatabaseHelper.Save(DbUser.class, user);
 	}
-	
-	@Test
-	public void loadMembership() {
-		DbMembership ship =DatabaseHelper.Get(DbMembership.class, "userId = 9");
-		
-		assertNotNull(ship);
-		
-	}
-	
+
 	@Test
 	public void userLoading() {
-		assertNotNull(DatabaseHelper.Get(DbUser.class));
+		DbUser user = DatabaseHelper.Get(DbUser.class, "id ='" + demoUserMail + "'");
+
+		// test database user handling
+		assertNotNull(user);
+		assertNotNull(user.getFirstname());
+		assertNotNull(user.getId());
+		assertNotNull(user.getLastname());
+		assertNotNull(user.getPassword());
+		assertNotNull(user.getUserId());
 	}
-	
-	
+
 	@Test
-	public void test() {		
-		DbUser user = new DbUser();
+	public void completeUserAndMembershipTest() {
 		DbPublicKey publicKey = new DbPublicKey();
 		DbManagerKey managerKey = new DbManagerKey();
 		DbGroup group = new DbGroup();
 		DbMembership membership = new DbMembership();
 		membership.setApproved(false);
 		try {
-			user.setId(demoUserMail);
-			user.setPassword(demoUserPasswordSalt);
-			DatabaseHelper.Save(DbUser.class, user);
 			assertNotNull(user.getUserId());
-						
 			Generator.generate(SettingsHelper.getSettings(DefaultSettings.class), publicKey, managerKey);
-			
 			group.setManagerKey(managerKey);
 			group.setPublicKey(publicKey);
 			DatabaseHelper.Save(DbGroup.class, group);
+			DbGroup loadedGroup = DatabaseHelper.Get(DbGroup.class, "groupId=" + group.getGroupId());
+
+			// test database group handling
 			assertNotNull(group.getGroupId());
-			
+			assertNotNull(group);
+			assertNotNull(loadedGroup);
+			assertNotNull(managerKey);
+			assertNotNull(publicKey);
+			assertNotNull(loadedGroup.getManagerKey());
+			assertNotNull(loadedGroup.getPublicKey());
+			assertNotNull(loadedGroup.getGroupId());
+
 			membership.setGroup(group);
 			membership.setUser(user);
-			
 			DatabaseHelper.Save(DbMembership.class, membership);
-			
+			DbMembership loadedShip = DatabaseHelper.Get(DbMembership.class, "userId=" + user.getUserId());
+
+			// test database membership handling
+			assertNotNull(membership);
+			assertNotNull(membership.getGroup());
+			assertNotNull(membership.getApproved());
+			assertNotNull(membership.getUser());
+			assertNotNull(loadedShip);
+			assertNotNull(loadedShip.getGroup());
+			assertNotNull(loadedShip.getApproved());
+			assertNotNull(loadedShip.getUser());
+
 			// SmartPhone A
 			SecretKey memberKeyA = new DemoSecretKey();
-			JoinHelper.init(SettingsHelper.getSettings(DefaultSettings.class), DatabaseHelper.Get(DbPublicKey.class, publicKey.getPublicKeyId()), memberKeyA);
-
+			JoinHelper.init(SettingsHelper.getSettings(DefaultSettings.class),
+					DatabaseHelper.Get(DbPublicKey.class, publicKey.getPublicKeyId()), memberKeyA);
 			JoinRequest joinRequestA = new JoinRequest(memberKeyA);
-			
-
-			JoinResponse joinResponseA = JoinHelper.join(SettingsHelper.getSettings(DefaultSettings.class), publicKey, managerKey, joinRequestA);
+			JoinResponse joinResponseA = JoinHelper.join(SettingsHelper.getSettings(DefaultSettings.class), publicKey,
+					managerKey, joinRequestA);
 			membership.setBigY(joinRequestA.bigY());
 			DatabaseHelper.Update(membership);
-			
 			memberKeyA.maintainResponse(joinResponseA);
 			membership.setApproved(true);
 			membership.setCreated(new Date());
 			DatabaseHelper.Update(membership);
-			
+
+			// test correct membership updating
+
+			DbMembership loadedShip2 = DatabaseHelper.Get(DbMembership.class, "userId=" + user.getUserId());
+
+			// test database membership handling
+			assertNotNull(membership);
+			assertNotNull(membership.getGroup());
+			assertNotNull(membership.getApproved());
+			assertNotNull(membership.getCreated());
+			assertNotNull(membership.getUser());
+			assertNotNull(membership.getBigY());
+			assertNotNull(loadedShip2);
+			assertNotNull(loadedShip2.getGroup());
+			assertNotNull(loadedShip2.getApproved());
+			assertNotNull(loadedShip2.getCreated());
+			assertNotNull(loadedShip2.getUser());
+			assertNotNull(loadedShip2.getBigY());
+			assertNotNull(loadedShip2.getMembershipId());
+
+			DbMembership ship = DatabaseHelper.Get(DbMembership.class, "userId =" + user.getUserId());
+			assertNotNull(ship);
+
 			byte[] testmessage = new BigInteger("1990").toByteArray();
-
 			BaseSignature signatureA = new BaseSignature();
-			
-			SignHelper.sign(SettingsHelper.getSettings(DefaultSettings.class), memberKeyA, publicKey, testmessage, signatureA);
-
-			assertTrue(VerifyHelper.verify(SettingsHelper.getSettings(DefaultSettings.class), publicKey, signatureA, testmessage));
-
-			
-			
-		}
-		finally {
+			SignHelper.sign(SettingsHelper.getSettings(DefaultSettings.class), memberKeyA, publicKey, testmessage,
+					signatureA);
+			assertTrue(VerifyHelper.verify(SettingsHelper.getSettings(DefaultSettings.class), publicKey, signatureA,
+					testmessage));
+		} finally {
 			DatabaseHelper.Delete(membership);
 			DatabaseHelper.Delete(user);
 			DatabaseHelper.Delete(group);
 		}
-		
+
 	}
 
 }

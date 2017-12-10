@@ -1,3 +1,7 @@
+/**
+ * This helper class gets a membership from the authority database for a specified user.
+ */
+
 package util;
 
 import data.DbSession;

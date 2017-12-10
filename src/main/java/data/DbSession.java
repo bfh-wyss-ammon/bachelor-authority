@@ -1,3 +1,7 @@
+/**
+ * This class stores the data of a session of the set-up protocol in the database of the authority.
+ */
+
 package data;
 
 import java.util.Date;
