@@ -36,6 +36,7 @@ import util.DatabaseHelper;
 import util.GroupHelper;
 import util.HashHelper;
 import util.JoinHelper;
+import util.Logger;
 import util.MembershipHelper;
 import util.OpenHelper;
 import util.SessionHelper;
@@ -57,6 +58,14 @@ public class AuthorityRouter extends BaseRouter {
 
 	@Override
 	public void Routes() {
+
+		post("/providerpublickey", (request, response) -> {
+
+			AuthoritySettings settings = SettingsHelper.getSettings(AuthoritySettings.class);
+			response.status(Consts.HttpStatuscodeOk);
+			return settings.getProviderPublicKey();
+
+		});
 
 		post("/login", (request, response) -> {
 			try {
@@ -88,6 +97,7 @@ public class AuthorityRouter extends BaseRouter {
 
 			} catch (Exception ex) {
 				response.status(Consts.HttpStatuscodeUnauthorized);
+				Logger.errorLogger(ex);
 			}
 			return "";
 		});
@@ -149,9 +159,10 @@ public class AuthorityRouter extends BaseRouter {
 				}
 				response.status(Consts.HttpStatuscodeOk);
 				return gson.toJson(group);
-			} catch (Exception e) {
+			} catch (Exception ex) {
 				// todo error handling
 				response.status(Consts.HttpInternalServerError);
+				Logger.errorLogger(ex);
 			}
 			return "";
 		});
@@ -270,6 +281,8 @@ public class AuthorityRouter extends BaseRouter {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				response.status(Consts.HttpBadRequest);
+				Logger.errorLogger(ex);
+
 			}
 			return "";
 		});
@@ -301,9 +314,10 @@ public class AuthorityRouter extends BaseRouter {
 				DatabaseHelper.Save(DbUser.class, user);
 
 				response.status(Consts.HttpStatuscodeOk);
-			} catch (Exception e) {
+			} catch (Exception ex) {
 				// todo error handling
 				response.status(Consts.HttpInternalServerError);
+				Logger.errorLogger(ex);
 			}
 			return "";
 		});
@@ -318,9 +332,10 @@ public class AuthorityRouter extends BaseRouter {
 				DatabaseHelper.Update(user);
 
 				response.status(Consts.HttpStatuscodeOk);
-			} catch (Exception e) {
+			} catch (Exception ex) {
 				// todo error handling
 				response.status(Consts.HttpInternalServerError);
+				Logger.errorLogger(ex);
 			}
 			return "";
 		});

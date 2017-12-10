@@ -25,8 +25,9 @@ public class AuthoritySignatureHelper {
 			sig.update(message);
 			return sig.verify(signature);
 			
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			Logger.errorLogger(ex);
 			return false;
 		}
 	}
@@ -43,8 +44,10 @@ try {
 	        signature.update(message);
 	        sigBytes = signature.sign();
 			
-		}catch (Exception e) {
-			e.printStackTrace();
+		}catch (Exception ex) {
+			ex.printStackTrace();
+			Logger.errorLogger(ex);
+
 			
 		}
 

@@ -14,6 +14,7 @@ import data.DbPublicKey;
 import settings.DefaultSettings;
 import util.DatabaseHelper;
 import util.Generator;
+import util.Logger;
 import util.SettingsHelper;
 
 @WebSocket
@@ -76,8 +77,9 @@ public class GroupCreateSocketHandler {
 		if (session.isOpen()) {
 			try {
 				session.getRemote().sendString(text);
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				Logger.errorLogger(ex);
 			}
 		}
 	}

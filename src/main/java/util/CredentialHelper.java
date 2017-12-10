@@ -40,6 +40,8 @@ public class CredentialHelper {
 			return Base64.getEncoder().encodeToString(hash);
 		} catch (Exception ex) {
 			System.out.print("Credential.GetHash: Error" + ex.getMessage());
+			Logger.errorLogger(ex);
+
 		}
 		return "";
 	}
