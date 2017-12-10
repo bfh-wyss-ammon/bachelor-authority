@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/authority</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">123456</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.show_sql">true</property>
+        <mapping resource="user.hbm.xml" />       
+        <mapping resource="publicKey.hbm.xml" /> 
+        <mapping resource="managerKey.hbm.xml" />
+        <mapping resource="group.hbm.xml" />
+        <mapping resource="membership.hbm.xml" />   
+        <mapping resource="session.hbm.xml" />     
+        <mapping class="data.DbUser" />  
+    </session-factory>
+</hibernate-configuration>
