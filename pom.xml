@@ -78,7 +78,7 @@
 					<skipTests>true</skipTests>
 					<archive>
 						<manifest>
-							<mainClass>common.Main</mainClass>
+							<mainClass>router.AuthorityRouter</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
