@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hibernate-mapping>
-	<class name="data.DbManagerKey" table="managerKey">
-		<id name="managerKeyId" type="int" column="managerKeyId">
+	<class name="data.DbManagerKey" table="managerkey">
+		<id name="managerKeyId" type="int" column="managerkeyid">
 			<generator class="identity" />
 		</id>
 		<property name="Xg" type="hibernate.BigIntegerType">
-			<column name="Xg" />
+			<column name="xg" />
 		</property>
 		<property name="p" type="hibernate.BigIntegerType">
 			<column name="p" />
