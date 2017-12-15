@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hibernate-mapping>
 	<class name="data.DbSession" table="session">
-		<id name="sessionId" type="int" column="sessionId">
+		<id name="sessionId" type="int" column="sessionid">
 			<generator class="identity" />
 		</id>
-		<many-to-one name="user" class="data.DbUser" column="userId" unique="true" not-null="true" lazy="false" />
+		<many-to-one name="user" class="data.DbUser" column="userid" unique="true" not-null="true" lazy="false" />
 		<property name="token">
 			<column name="token" />
 		</property>

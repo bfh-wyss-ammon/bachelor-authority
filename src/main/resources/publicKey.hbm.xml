@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hibernate-mapping>
-	<class name="data.DbPublicKey" table="publicKey">
-		<id name="publicKeyId" type="int" column="publicKeyId">
+	<class name="data.DbPublicKey" table="publickey">
+		<id name="publicKeyId" type="int" column="publickeyid">
 			<generator class="identity" />
 		</id>
 		<property name="n" type="hibernate.BigIntegerType">
@@ -20,19 +20,19 @@
 			<column name="w" />
 		</property>
 		<property name="bigQ" type="hibernate.BigIntegerType">
-			<column name="bigQ" />
+			<column name="bigq" />
 		</property>
 		<property name="bigP" type="hibernate.BigIntegerType">
-			<column name="bigP" />
+			<column name="bigp" />
 		</property>
 		<property name="bigF" type="hibernate.BigIntegerType">
-			<column name="bigF" />
+			<column name="bigf" />
 		</property>
 		<property name="bigG" type="hibernate.BigIntegerType">
-			<column name="bigG" />
+			<column name="bigg" />
 		</property>
 		<property name="bigH" type="hibernate.BigIntegerType">
-			<column name="bigH" />
+			<column name="bigh" />
 		</property>
 	</class>
 </hibernate-mapping>
