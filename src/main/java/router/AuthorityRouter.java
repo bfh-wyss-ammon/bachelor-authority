@@ -29,7 +29,10 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import data.AuthoritySettings;
+import data.BigIntegerAdapater;
 import data.DbGroup;
 import data.DbManagerKey;
 import data.DbSession;
@@ -313,10 +316,10 @@ public class AuthorityRouter extends BaseRouter {
 	@Override
 	public void ProtectedRoutes() {
 
-		get("/groups", (request, response) -> {
-			List<DbGroup> groupList = DatabaseHelper.Get(DbGroup.class);
-			response.status(Consts.HttpStatuscodeOk);
-			return new Gson().toJson(groupList);
+		get("/groups", (request, response) -> {			
+			GsonBuilder gsonBuilder = new GsonBuilder();
+			gsonBuilder.registerTypeAdapter(BigInteger.class, new BigIntegerAdapater());
+			return gsonBuilder.create().toJson(DatabaseHelper.Get(DbGroup.class));
 		});
 
 		get("/users", (request, response) -> {
