@@ -50,3 +50,4 @@ settings.json
 .scala_dependencies
 .worksheet
 /target/
+ debugLog.txt

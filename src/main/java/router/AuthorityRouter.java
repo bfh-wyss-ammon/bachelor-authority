@@ -84,7 +84,7 @@ public class AuthorityRouter extends BaseRouter {
 			return "";
 		});
 
-		post("/providerpublickey", (request, response) -> {
+		get("/providerpublickey", (request, response) -> {
 
 			AuthoritySettings settings = SettingsHelper.getSettings(AuthoritySettings.class);
 			response.status(Consts.HttpStatuscodeOk);
