@@ -20,6 +20,7 @@
  */
 
 package util;
+
 import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
@@ -28,12 +29,12 @@ import org.apache.commons.codec.binary.Base64;
 
 import data.AuthoritySettings;
 
-
 public class AuthoritySignatureHelper {
-	
-	public static boolean verifyProviderMessage (byte[] message, byte[] signature) {
+
+	public static boolean verifyProviderMessage(byte[] message, byte[] signature) {
 		try {
-			byte[] publicKeyEncoded = Base64.decodeBase64(SettingsHelper.getSettings(AuthoritySettings.class).getProviderPublicKey());
+			byte[] publicKeyEncoded = Base64
+					.decodeBase64(SettingsHelper.getSettings(AuthoritySettings.class).getProviderPublicKey());
 			X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(publicKeyEncoded);
 			KeyFactory keyFactory = KeyFactory.getInstance("DSA", "SUN");
 			PublicKey pubKey = keyFactory.generatePublic(pubKeySpec);
@@ -41,39 +42,35 @@ public class AuthoritySignatureHelper {
 			sig.initVerify(pubKey);
 			sig.update(message);
 			return sig.verify(signature);
-			
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			Logger.errorLogger(ex);
 			return false;
 		}
 	}
-	
-	public static byte[] sign (byte[] message) {
-		byte[] sigBytes =null;
-try {
-			byte[] privateKeyEncoded = Base64.decodeBase64(SettingsHelper.getSettings(AuthoritySettings.class).getPrivateKey());
+
+	public static byte[] sign(byte[] message) {
+		byte[] sigBytes = null;
+		try {
+			byte[] privateKeyEncoded = Base64
+					.decodeBase64(SettingsHelper.getSettings(AuthoritySettings.class).getPrivateKey());
 			PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(privateKeyEncoded);
-	        KeyFactory keyFactory = KeyFactory.getInstance("DSA", "SUN");
-	        PrivateKey priv = keyFactory.generatePrivate(spec);
-	        Signature signature = Signature.getInstance("SHA256withDSA", "SUN");
-	        signature.initSign(priv);
-	        signature.update(message);
-	        sigBytes = signature.sign();
-			
-		}catch (Exception ex) {
+			KeyFactory keyFactory = KeyFactory.getInstance("DSA", "SUN");
+			PrivateKey priv = keyFactory.generatePrivate(spec);
+			Signature signature = Signature.getInstance("SHA256withDSA", "SUN");
+			signature.initSign(priv);
+			signature.update(message);
+			sigBytes = signature.sign();
+
+		} catch (Exception ex) {
 			ex.printStackTrace();
 			Logger.errorLogger(ex);
 
-			
 		}
 
-        return sigBytes;
-		
+		return sigBytes;
+
 	}
-
-	
-
-
 
 }
